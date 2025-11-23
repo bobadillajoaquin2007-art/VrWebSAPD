@@ -1,29 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>SAPD - Página Principal</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>SAPD — Portafolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-<header>
-    <h1>SAPD</h1>
-    <nav>
-        <a href="index.html">Inicio</a>
-        <a href="rangos.html">Rangos</a>
-        <a href="codigo-radial.html">Código Radial</a>
-        <a href="codigo-penal.html">Código Penal</a>
-        <a href="contacto.html">Contacto</a>
-    </nav>
-</header>
+    <canvas id="particles" aria-hidden="true"></canvas>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <header>
+        <div class="brand">
+            <div class="logo">SAPD</div>
+            <div>
+                <h1>SAPD</h1>
+                <p class="muted">San Andreas Police Department • Portafolio</p>
+            </div>
+        </div>
+        <nav aria-label="Principal">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="rangos.html">Rangos</a></li>
+                <li><a href="codigo-radial.html">Código Radial</a></li>
+                <li><a href="codigo-penal.html">Código Penal</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<div class="container">
-    <h2>¿Qué es SAPD?</h2>
-    <p>
-        SAPD (San Andreas Police Department) es la fuerza policial del estado de San Andreas. 
-        Su misión es proteger y servir a los ciudadanos, mantener el orden y hacer cumplir la ley.
-    </p>
-</div>
+    <main id="main" class="container">
+        <section class="hero card">
+            <div>
+                <h2>Protección. Servicio. Integridad.</h2>
+                <p class="muted">Documentación, normas y recursos del departamento — estilo Hyprland, visual y claro.</p>
+            </div>
+            <div class="badge">Última actualización: 2025</div>
+        </section>
 
+        <aside class="card toc">
+            <h4>Accesos</h4>
+            <a href="codigo-penal.html">Código Penal</a>
+            <a href="codigo-radial.html">Código Radial</a>
+            <a href="rangos.html">Rangos</a>
+            <a href="contacto.html">Contacto</a>
+        </aside>
+
+        <section class="card content">
+            <h2>¿Qué es SAPD?</h2>
+            <p>SAPD (San Andreas Police Department) es la fuerza policial del estado de San Andreas. Su misión es proteger y servir a los ciudadanos, mantener el orden y hacer cumplir la ley.</p>
+            <p class="muted">Este sitio actúa como portafolio y documentación interna: reglas, códigos y procedimientos.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>© SAPD — Visual portafolio</p>
+    </footer>
+
+    <script src="scripts/particles.js" defer></script>
 </body>
 </html>
