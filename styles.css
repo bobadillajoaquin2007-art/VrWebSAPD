@@ -123,3 +123,9 @@ header{justify-content:center}
 .content h2{text-align:center}
 .top-phrase{margin-bottom:12px}
 
+/* Estilos para el nav simple pedido */
+.nav-simple{display:flex;gap:18px;justify-content:center;padding:12px 0;z-index:3}
+.nav-simple a{color:var(--accent);text-decoration:none;padding:8px 14px;border-radius:10px;background:rgba(255,255,255,0.02);font-weight:700}
+.nav-simple a:hover{background:rgba(77,211,255,0.06);transform:translateY(-2px)}
+
+
