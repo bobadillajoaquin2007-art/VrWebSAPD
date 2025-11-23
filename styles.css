@@ -114,3 +114,24 @@ a:focus{ outline:2px solid rgba(48,168,255,0.12); outline-offset:2px }
 @keyframes neonPulse{ 0%{ text-shadow:0 0 6px rgba(48,168,255,0.06)} 50%{ text-shadow:0 0 18px rgba(48,168,255,0.12)} 100%{ text-shadow:0 0 6px rgba(48,168,255,0.06)} }
 h2{ animation: neonPulse 6s ease-in-out infinite }
 
+/* Calculadora de sanciones */
+.calc-panel{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    padding:14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.02);
+    margin-bottom:18px;
+}
+.article-list{ max-height:300px; overflow:auto; padding-right:8px; flex:1 }
+.article-item{ display:flex; align-items:center; gap:10px; padding:6px 4px; border-radius:6px }
+.article-item input{ width:18px; height:18px }
+.result-box{ width:320px; min-width:200px; background:rgba(0,0,0,0.05); padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.02) }
+.result-box h4{ margin:0 0 8px 0; color:var(--accent) }
+.result-value{ font-weight:700; color:#eaf6ff; margin-top:6px }
+.selected-list{ font-size:13px; color:var(--muted); max-height:160px; overflow:auto; margin-top:8px }
+
+@media (max-width:820px){ .calc-panel{ flex-direction:column } .result-box{ width:100% } }
+
