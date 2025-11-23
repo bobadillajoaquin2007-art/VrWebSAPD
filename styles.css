@@ -118,7 +118,17 @@ footer{position:relative;z-index:2;max-width:1200px;margin:0 auto 48px;padding:1
 
 /* Simplified layout: centrar contenido principal y optimizar historia */
 header{justify-content:center}
-.container{max-width:900px;margin:36px auto;padding:28px;text-align:center;display:block}
+
+/* Dos columnas: nav a la izquierda, contenido a la derecha */
+.container{max-width:1100px;margin:36px auto;padding:28px;display:flex;gap:28px;align-items:flex-start}
+.nav-left{flex:0 0 200px;display:flex;flex-direction:column;gap:10px}
+.nav-left a{color:var(--accent);text-decoration:none;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.02);font-weight:700}
+.nav-left a:hover{background:rgba(77,211,255,0.06);transform:translateY(-2px)}
+
+.main-content{flex:1;display:flex;flex-direction:column;gap:16px}
+.page-header{text-align:center;margin-bottom:4px}
+.page-header h1{margin:0;color:var(--accent)}
+
 .history{max-width:760px;margin:0 auto;text-align:left}
 .content h2{text-align:center}
 .top-phrase{margin-bottom:12px}
