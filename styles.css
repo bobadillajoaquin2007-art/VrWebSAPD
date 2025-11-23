@@ -1,40 +1,116 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b1e33;
-    color: #fff;
+:root{
+    --bg:#060914; /* very dark blue-black */
+    --panel: rgba(15,30,50,0.6);
+    --accent:#30a8ff; /* neon blue */
+    --accent-2:#5ef0c9; /* teal */
+    --muted:#9fb6cf;
+    --glass-border: rgba(64,180,255,0.12);
 }
 
-header {
-    background: #0d2b4d;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family: Inter, Roboto, "Segoe UI", Arial, sans-serif;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(48,168,255,0.05), transparent),
+                linear-gradient(180deg, #071028 0%, var(--bg) 60%);
+    color:var(--muted);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.45;
 }
 
-header h1 {
-    margin: 0;
-    color: #4fa3ff;
+header{
+    backdrop-filter: blur(6px) saturate(120%);
+    background: linear-gradient(90deg, rgba(4,18,34,0.6), rgba(6,24,44,0.6));
+    border-bottom:1px solid var(--glass-border);
+    padding:18px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 15px;
-    font-weight: bold;
+header h1{
+    margin:0;
+    color:var(--accent);
+    font-weight:700;
+    letter-spacing:1px;
+    text-shadow:0 4px 18px rgba(48,168,255,0.06);
 }
 
-nav a:hover {
-    color: #4fa3ff;
+nav{
+    display:flex;
+    gap:18px;
+    align-items:center;
 }
 
-.container {
-    padding: 30px;
-    max-width: 900px;
-    margin: auto;
-    background-color: #10263e;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #000;
+nav a{
+    color:var(--muted);
+    text-decoration:none;
+    font-weight:600;
+    padding:8px 12px;
+    border-radius:6px;
+    position:relative;
+    transition:all .18s ease;
+    text-transform:uppercase;
+    font-size:13px;
+    letter-spacing:0.9px;
 }
+
+nav a::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:6px;
+    width:0;
+    height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    border-radius:3px;
+    transition:width .18s ease;
+}
+
+nav a:hover{ color: #eaf6ff; transform:translateY(-2px); }
+nav a:hover::after{ width:60%; }
+
+.container{
+    max-width:1100px;
+    margin:28px auto;
+    background:var(--panel);
+    padding:26px;
+    border-radius:12px;
+    border:1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(2,8,20,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+h2{ color:#eaf6ff; margin-top:0; font-size:22px; display:flex; align-items:center; gap:10px }
+h3{ color:var(--accent); margin-bottom:6px }
+
+section{ margin-bottom:18px }
+
+ul{ padding-left:18px; margin:8px 0 18px 0 }
+li{ padding:8px 6px; color:#dbeefc; border-left:3px solid transparent; transition:all .12s ease }
+li strong{ color:var(--accent-2) }
+li:hover{ background: linear-gradient(90deg, rgba(48,168,255,0.03), rgba(94,240,201,0.01)); transform:translateX(4px) }
+
+hr{ border:0; height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); margin:18px 0 }
+
+/* Small helpers */
+.note{ font-size:13px; color:var(--muted); padding:10px 12px; border-radius:8px; background:rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.02) }
+
+/* Responsiveness */
+@media (max-width:700px){
+    nav{ gap:10px }
+    .container{ padding:18px; margin:14px }
+    h2{ font-size:18px }
+}
+
+/* Footer small print */
+footer{ color:var(--muted); font-size:13px; text-align:center; padding:18px 0 }
+
+/* Accessibility focus */
+a:focus{ outline:2px solid rgba(48,168,255,0.12); outline-offset:2px }
+
+/* Subtle animated accent glow for headings */
+@keyframes neonPulse{ 0%{ text-shadow:0 0 6px rgba(48,168,255,0.06)} 50%{ text-shadow:0 0 18px rgba(48,168,255,0.12)} 100%{ text-shadow:0 0 6px rgba(48,168,255,0.06)} }
+h2{ animation: neonPulse 6s ease-in-out infinite }
+
