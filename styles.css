@@ -1,102 +1,865 @@
-/* styles.css - Estilo inspirado en Linux y SAPD */
+/* --- Variables de Color --- */
+:root {
+    --vr-cyan: #48D1CC;
+    --vr-blue-professional: #5865F2;
+    --vr-dark: #0f101a;
+    --vr-darker: #0a0b15;
+    --vr-dark-card: #1c1e2e;
+    --vr-text: #ffffff;
+    --vr-text-muted: #a0a3bd;
+    --vr-border: rgba(255, 255, 255, 0.1);
+    --vr-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --vr-transition: all 0.3s ease;
+}
 
-/* Reset básico */
+/* --- Estilos Generales --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Fira Code', monospace, monospace;
 }
 
-/* Colores basados en terminal Linux y estilo SAPD */
-:root {
-    --bg-color: #1e1e2f; /* Fondo oscuro estilo terminal */
-    --primary-color: #00ffff; /* Azul cian, estilo policial */
-    --secondary-color: #ff4500; /* Rojo para alertas */
-    --text-color: #e0e0e0; /* Texto claro */
-    --highlight-color: #ffa500; /* Naranja para destacar */
-}
-
-/* Body */
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--vr-dark);
+    font-family: 'Roboto', sans-serif;
+    color: var(--vr-text);
+    overflow-x: hidden;
     line-height: 1.6;
-    padding: 20px;
 }
 
-/* Encabezados */
-h1, h2, h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
+/* --- Fondo de PartÃ­culas --- */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: var(--vr-darker);
 }
 
-/* Links */
-a {
-    color: var(--highlight-color);
-    text-decoration: none;
+.content-wrapper {
+    position: relative;
+    z-index: 1;
 }
 
-a:hover {
-    text-decoration: underline;
+/* --- Mensajes de aviso (login/logout) --- */
+.alert-success, .alert-danger {
+    background: var(--vr-dark-card);
+    border: 1px solid var(--vr-border);
+    border-left: 4px solid var(--vr-cyan);
+    color: var(--vr-text);
+    font-family: 'Teko', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    margin-top: 70px !important;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 1.5rem;
+    animation: fadeInDown 0.6s ease;
 }
 
-/* Botones estilo SAPD */
-button {
-    background-color: var(--primary-color);
-    color: var(--bg-color);
-    border: none;
-    padding: 10px 20px;
-    margin: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    border-radius: 4px;
+.alert-danger {
+    border-left-color: #ff4d4d;
 }
 
-button:hover {
-    background-color: var(--highlight-color);
-    color: var(--bg-color);
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Tarjetas / paneles */
-.card {
-    background-color: #2a2a3f;
-    border-left: 4px solid var(--primary-color);
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+/* --- Barra de NavegaciÃ³n --- */
+.navbar {
+    background: rgba(15, 16, 26, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--vr-border);
+    padding: 0.8rem 0;
+    transition: var(--vr-transition);
 }
 
-/* Código tipo terminal */
-code, pre {
-    background-color: #0d0d0d;
-    color: #00ff00;
-    padding: 5px;
-    border-radius: 4px;
-    font-family: 'Fira Code', monospace;
+.navbar-brand {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
 }
 
-/* Listas */
-ul, ol {
-    margin-left: 20px;
-    margin-bottom: 10px;
+/* --- Logo en Navbar (versiÃ³n sin afectar altura del header) --- */
+.navbar-brand img {
+    height: 50px;
+    width: auto;
+    margin-right: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    transform: scale(1.8);
+    transform-origin: left center;
 }
 
-/* Alertas */
-.alert {
-    background-color: var(--secondary-color);
-    color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 10px 0;
+.navbar-brand img:hover {
+    transform: scale(1.9) translateY(-2px);
 }
 
-/* Footer */
-footer {
+.navbar-nav .nav-link {
+    color: var(--vr-text);
+    font-weight: 500;
+    position: relative;
+    margin: 0 8px;
+    padding: 6px 0;
+    transition: var(--vr-transition);
+    font-size: 1.05rem;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--vr-cyan);
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: var(--vr-cyan);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Botones en navbar */
+.navbar .btn {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 6px 16px;
+    font-size: 0.95rem;
+    transition: var(--vr-transition);
+}
+
+.btn-outline-light {
+    border-color: var(--vr-border);
+    color: var(--vr-text);
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--vr-cyan);
+    color: var(--vr-cyan);
+}
+
+.btn-outline-danger {
+    border-color: rgba(255, 77, 77, 0.5);
+    color: #ff6b6b;
+}
+
+.btn-outline-danger:hover {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
     text-align: center;
-    margin-top: 40px;
-    color: #888;
-    font-size: 0.9em;
+    position: relative;
+}
+
+.hero-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, var(--vr-cyan), var(--vr-blue-professional));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: gradientShift 4s ease infinite alternate;
+    text-shadow: 0 2px 10px rgba(88, 101, 242, 0.2);
+}
+
+.hero-subtitle {
+    font-family: 'Teko', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    min-height: 3.2rem;
+    color: white;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: initial;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+    letter-spacing: 1.5px;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* --- BotÃ³n Profesional --- */
+.btn-primary-professional {
+    background: linear-gradient(45deg, var(--vr-blue-professional), #7882f2);
+    border: none;
+    color: var(--vr-text);
+    padding: 14px 36px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--vr-transition);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+    font-size: 1.1rem;
+}
+
+.btn-primary-professional:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(88, 101, 242, 0.6);
+    color: var(--vr-text);
+}
+
+/* --- Secciones Generales --- */
+section {
+    padding: 5rem 0;
+}
+
+.section-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 3.8rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 12px;
+    margin-bottom: 2rem;
+    color: var(--vr-text);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(to right, var(--vr-cyan), var(--vr-blue-professional));
+    border-radius: 2px;
+}
+
+.text-white-50 {
+    color: var(--vr-text-muted) !important;
+}
+
+/* --- Tarjetas de InformaciÃ³n (CÃ³mo unirse) --- */
+.info-card {
+    background: var(--vr-dark-card);
+    border-radius: 20px;
+    padding: 2.2rem;
+    text-align: center;
+    border: 1px solid var(--vr-border);
+    transition: var(--vr-transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+}
+
+.info-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--vr-shadow);
+    border-color: rgba(88, 101, 242, 0.3);
+}
+
+.info-card-icon {
+    font-size: 3.2rem;
+    margin-bottom: 1.4rem;
+    background: linear-gradient(135deg, var(--vr-cyan), var(--vr-blue-professional));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.info-card-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+    color: var(--vr-text);
+}
+
+.info-card-text {
+    color: var(--vr-text-muted);
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+}
+
+/* --- Tarjetas de EstadÃ­sticas --- */
+.stat-card {
+    background: var(--vr-dark-card);
+    border-radius: 20px;
+    padding: 2.2rem;
+    text-align: center;
+    border: 1px solid var(--vr-border);
+    transition: var(--vr-transition);
+    backdrop-filter: blur(10px);
+}
+
+.stat-card:hover {
+    transform: scale(1.03);
+    border-color: rgba(72, 209, 204, 0.4);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card-icon {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--vr-cyan), var(--vr-blue-professional));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card-number {
+    font-family: 'Teko', sans-serif;
+    font-size: 3.8rem;
+    line-height: 1;
+    margin: 0.5rem 0;
+    color: var(--vr-text);
+}
+
+.stat-card-label {
+    color: var(--vr-text-muted);
+    font-size: 0.95rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* --- Estado del Servidor --- */
+.server-status-online, .server-status-offline {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.server-status-online {
+    background: rgba(0, 255, 128, 0.1);
+    border: 1px solid #00ff80;
+    color: #00ff80;
+}
+
+.server-status-online:hover {
+    background: rgba(0, 255, 128, 0.2);
+    transform: scale(1.02);
+}
+
+.server-status-offline {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid #ff0000;
+    color: #ff0000;
+}
+
+.server-status-offline:hover {
+    background: rgba(255, 0, 0, 0.2);
+    transform: scale(1.02);
+}
+
+/* Iconos de estado */
+.server-status-online i, .server-status-offline i {
+    font-size: 1.2rem;
+}
+
+/* --- Noticias del Servidor --- */
+.news-card {
+    background: var(--vr-dark-card);
+    border-radius: 18px;
+    border: 1px solid var(--vr-border);
+    transition: var(--vr-transition);
+    height: 100%;
+    backdrop-filter: blur(10px);
+}
+
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--vr-shadow);
+    border-color: var(--vr-border);
+}
+
+.news-card .card-body {
+    padding: 1.8rem;
+}
+
+.news-card .card-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: var(--vr-text);
+}
+
+.news-card .card-text {
+    color: var(--vr-text-muted);
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+}
+
+/* --- Footer --- */
+footer {
+    background: var(--vr-darker);
+    border-top: 1px solid var(--vr-border);
+    font-size: 1.05rem;
+}
+
+/* --- Modal de Login --- */
+.modal-content {
+    border: none;
+    border-radius: 20px;
+    background: var(--vr-dark-card);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--vr-border);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--vr-border);
+    padding: 1.5rem 1.5rem 1rem;
+}
+
+.modal-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 2rem;
+    color: var(--vr-text);
+}
+
+.btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.form-control {
+    background: rgba(30, 32, 46, 0.7);
+    border: 1px solid var(--vr-border);
+    color: var(--vr-text);
+    padding: 12px 16px;
+    border-radius: 12px;
+    transition: var(--vr-transition);
+}
+
+.form-control:focus {
+    background: rgba(30, 32, 46, 0.9);
+    border-color: var(--vr-blue-professional);
+    box-shadow: 0 0 0 0.25rem rgba(88, 101, 242, 0.25);
+    color: var(--vr-text);
+}
+
+.form-label {
+    color: var(--vr-text);
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+}
+
+/* --- Botones de Redes Sociales en Footer --- */
+.btn-social {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    border: 1px solid var(--vr-border);
+    background: var(--vr-dark-card);
+    color: var(--vr-text);
+}
+
+.btn-social:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-discord:hover { color: #5865F2; border-color: #5865F2; }
+.btn-instagram:hover { color: #E1306C; border-color: #E1306C; }
+.btn-facebook:hover { color: #1877F2; border-color: #1877F2; }
+.btn-tiktok:hover { color: #000000; border-color: #000000; background: #000; }
+
+/* --- NUEVA SECCIÃ“N: Â¿CÃ“MO CONECTARTE? (DISEÃ‘O COMO EN LA IMAGEN) --- */
+
+.connect-section {
+    background: transparent;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.connect-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--vr-text);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+
+.connect-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--vr-cyan), var(--vr-blue-professional));
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.connect-subtitle {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    color: var(--vr-text-muted);
+    text-align: center;
+    margin-bottom: 3rem;
+    z-index: 2;
+    position: relative;
+}
+
+.connect-cards {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- Tarjetas de PC y Android (idÃ©nticas) --- */
+.connect-card {
+    background: rgba(30, 32, 46, 0.7);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--vr-border);
+    backdrop-filter: blur(10px);
+    transition: var(--vr-transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    min-height: 450px;
+}
+
+.connect-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(88, 101, 242, 0.3);
+}
+
+/* --- Iconos de tarjetas (ajustados para que PC y Android tengan la misma altura visual) --- */
+.connect-card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--vr-cyan);
+    transition: var(--vr-transition);
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+/* Ajuste fino para el Ã­cono de PC */
+.connect-card:nth-child(1) .connect-card-icon {
+    transform: scale(0.8);
+}
+
+/* Ajuste fino para el Ã­cono de Android */
+.connect-card:nth-child(2) .connect-card-icon {
+    transform: scale(1);
+}
+
+.connect-card:hover .connect-card-icon {
+    color: var(--vr-blue-professional);
+    transform: scale(1.1);
+}
+
+.connect-card-title {
+    font-family: 'Teko', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--vr-text);
+    margin-bottom: 1.5rem;
+}
+
+.connect-card-text {
+    color: var(--vr-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.connect-card-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.connect-card-button {
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--vr-transition);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 120px;
+}
+
+.connect-card-button-discord {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--vr-border);
+    color: var(--vr-text);
+}
+
+.connect-card-button-discord:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--vr-cyan);
+    color: var(--vr-cyan);
+}
+
+.connect-card-button-download {
+    background: linear-gradient(45deg, var(--vr-blue-professional), #7882f2);
+    border: none;
+    color: var(--vr-text);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+}
+
+.connect-card-button-download:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(88, 101, 242, 0.6);
+    color: var(--vr-text);
+}
+
+/* --- IP DEL SERVIDOR EN ANDROID (como un botÃ³n o bloque) --- */
+.android-ip-only {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--vr-border);
+    border-radius: 12px;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    color: var(--vr-text);
+    text-align: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.android-ip-only span {
+    font-weight: 700;
+    color: var(--vr-cyan);
+    word-break: break-all;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+    .hero-title { font-size: 3.5rem; }
+    .hero-subtitle { font-size: 1.5rem; }
+    .section-title { font-size: 3rem; }
+    .stat-card-number { font-size: 3rem; }
+    .navbar-brand img {
+        height: 45px;
+        transform: scale(1.6);
+    }
+    .connect-section {
+        padding: 3rem 0;
+    }
+    .connect-title {
+        font-size: 3rem;
+    }
+    .connect-cards {
+        gap: 1.5rem;
+    }
+    .connect-card {
+        max-width: 450px;
+        padding: 2rem;
+        min-height: 400px;
+    }
+    .connect-card-icon {
+        font-size: 3.5rem;
+    }
+    .connect-card-title {
+        font-size: 2rem;
+    }
+    .android-ip-only {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.8rem; }
+    .hero-subtitle { font-size: 1.3rem; }
+    .section-title { font-size: 2.4rem; }
+    section { padding: 3.5rem 0; }
+    .navbar-nav .nav-link { margin: 0 5px; font-size: 1rem; }
+    .info-card, .stat-card, .news-card { margin-bottom: 1.5rem; }
+    .navbar-brand { font-size: 1.6rem; }
+    .navbar-brand img {
+        height: 40px;
+        transform: scale(1.5);
+    }
+    .connect-section {
+        padding: 3rem 0;
+    }
+    .connect-title {
+        font-size: 2.8rem;
+    }
+    .connect-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+    .connect-card {
+        max-width: 100%;
+        padding: 2rem;
+        min-height: 400px;
+    }
+    .connect-card-icon {
+        font-size: 3.5rem;
+    }
+    .connect-card-title {
+        font-size: 2rem;
+    }
+    .android-ip-only {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title { font-size: 2.3rem; }
+    .btn-primary-professional { padding: 12px 28px; font-size: 1rem; }
+    .stat-card-number { font-size: 2.5rem; }
+    .info-card-icon, .stat-card-icon { font-size: 2.5rem; }
+    .alert-success, .alert-danger {
+        font-size: 1.1rem;
+        margin-top: 60px !important;
+        padding: 0.8rem 1.2rem;
+    }
+    .connect-title {
+        font-size: 2.3rem;
+    }
+    .connect-card-icon {
+        font-size: 3rem;
+    }
+    .connect-card-title {
+        font-size: 1.8rem;
+    }
+    .connect-card-text {
+        font-size: 1rem;
+    }
+    .connect-card-button {
+        font-size: 0.9rem;
+        padding: 0.7rem 1.2rem;
+    }
+    .android-ip-only {
+        font-size: 0.95rem;
+    }
+}
+
+/* --- Mensaje flotante de aviso --- */
+.floating-message {
+    background: rgba(15, 16, 26, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--vr-text);
+    font-family: 'Teko', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    margin-top: 70px !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: fadeInDown 0.6s ease;
+    position: relative;
+    z-index: 1000;
+}
+/* --- SOLUCIÃ“N PARA FOOTER FLOTANTE (STICKY FOOTER) --- */
+
+/* 1. Convierte el body en un contenedor flexible vertical */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el body ocupe al menos el 100% de la altura de la pantalla */
+}
+
+/* 2. Haz que el contenido principal crezca para ocupar el espacio sobrante */
+/* Esto empujarÃ¡ el footer hacia abajo en pÃ¡ginas con poco contenido */
+.content-wrapper, main {
+    flex-grow: 1;
+}
+/* Estilo para que el texto del inventario sea blanco */
+/* SOLUCIÃ“N DEFINITIVA PARA EL COLOR DEL INVENTARIO */
+
+/* Esta regla apunta especÃ­ficamente a la PRIMERA celda (el nombre del objeto) de cada fila */
+.tabla-inventario tr td:first-child {
+    color: #FFFFFF !important; 
+}
+
+/* Esta regla apunta a la SEGUNDA celda (la cantidad) y la mantiene en un color mÃ¡s suave */
+.tabla-inventario tr td:nth-child(2) {
+    color: #a0a3bd !important; 
+}
+
+/* Y esta para los encabezados ("OBJETO", "CANTIDAD") */
+.tabla-inventario th {
+    color: #a0a3bd !important;
 }
