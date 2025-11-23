@@ -115,6 +115,10 @@ hr { border: 0; height: 1px; background: rgba(255,255,255,0.03); margin: 18px 0 
     .result-box{ width:100% }
 }
 
+/* Accessibility: Skip link (moved from inline <style> in HTML) */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{left:10px;top:10px;width:auto;height:auto;background:var(--accent);color:#001;padding:6px 8px;border-radius:6px}
+
 /* Accessibility focus */
 a:focus{ outline:2px solid rgba(79,163,255,0.18); outline-offset:2px }
 
