@@ -1,125 +1,102 @@
+/* styles.css - Estilo inspirado en Linux y SAPD */
 
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Fira Code', monospace, monospace;
+}
+
+/* Colores basados en terminal Linux y estilo SAPD */
 :root {
-  --bg-1: #0b0f14;
-  --accent: #4dd3ff;
-  --muted: #a9d6ea;
+    --bg-color: #1e1e2f; /* Fondo oscuro estilo terminal */
+    --primary-color: #00ffff; /* Azul cian, estilo policial */
+    --secondary-color: #ff4500; /* Rojo para alertas */
+    --text-color: #e0e0e0; /* Texto claro */
+    --highlight-color: #ffa500; /* Naranja para destacar */
 }
-* { box-sizing: border-box; }
-html, body { height: 100%; }
+
+/* Body */
 body {
-  margin: 0;
-  font-family: Inter, system-ui, Arial;
-  background: linear-gradient(180deg, var(--bg-1), #061018);
-  color: #eaf6ff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
 }
 
-.skip-link { position: absolute; left: -9999px; }
-.skip-link:focus {
-  left: 12px; top: 12px; position: fixed;
-  background: var(--accent); color: #001;
-  padding: 6px 10px; border-radius: 8px; z-index: 6;
+/* Encabezados */
+h1, h2, h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
 }
 
-.nav-simple {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  padding: 18px 0 8px 0;
-  background: linear-gradient(90deg, rgba(77,211,255,0.08), rgba(255,255,255,0.01));
-  border-bottom: 1px solid rgba(77,211,255,0.12);
-  box-shadow: 0 2px 16px rgba(77,211,255,0.08);
-}
-.nav-simple a {
-  color: var(--accent);
-  text-decoration: none;
-  padding: 10px 22px;
-  border-radius: 12px;
-  background: rgba(77,211,255,0.08);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  font-size: 17px;
-  transition: all .18s cubic-bezier(.4,1.4,.6,1);
-  box-shadow: 0 2px 8px rgba(77,211,255,0.04);
-}
-.nav-simple a:hover {
-  background: linear-gradient(90deg, var(--accent), #7ce0ff);
-  color: #012;
-  transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 8px 24px rgba(77,211,255,0.18);
+/* Links */
+a {
+    color: var(--highlight-color);
+    text-decoration: none;
 }
 
-.center-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 38px 0 18px 0;
-}
-.logo {
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent), #7ce0ff);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; color: #002;
-  font-size: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-}
-.site-title {
-  margin: 0;
-  font-size: 36px;
-  color: var(--accent);
-  font-weight: 900;
-  letter-spacing: 1.2px;
-  text-shadow: 0 2px 16px rgba(77,211,255,0.12);
+a:hover {
+    text-decoration: underline;
 }
 
-.container.single-column {
-  max-width: 820px;
-  margin: 48px auto;
-  padding: 28px;
-  display: block;
-  text-align: center;
-}
-.container.single-column .card {
-  margin: 24px auto;
-  text-align: left;
-  padding: 32px 28px;
-  background: linear-gradient(120deg, rgba(77,211,255,0.08), rgba(255,255,255,0.01));
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(77,211,255,0.10);
-  border: 1px solid rgba(77,211,255,0.13);
-}
-.container.single-column .card h2 {
-  text-align: left;
-  font-size: 24px;
-  color: var(--accent);
-  margin-top: 0;
-  margin-bottom: 18px;
-}
-.container.single-column p {
-  color: #eaf6ff;
-  line-height: 1.7;
-  font-size: 17px;
-  margin-bottom: 14px;
+/* Botones estilo SAPD */
+button {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 4px;
 }
 
+button:hover {
+    background-color: var(--highlight-color);
+    color: var(--bg-color);
+}
+
+/* Tarjetas / paneles */
+.card {
+    background-color: #2a2a3f;
+    border-left: 4px solid var(--primary-color);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+/* Código tipo terminal */
+code, pre {
+    background-color: #0d0d0d;
+    color: #00ff00;
+    padding: 5px;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace;
+}
+
+/* Listas */
+ul, ol {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+/* Alertas */
+.alert {
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Footer */
 footer {
-  position: relative;
-  z-index: 2;
-  max-width: 820px;
-  margin: 32px auto 0 auto;
-  padding: 16px 20px;
-  color: var(--muted);
-  text-align: center;
-  font-size: 15px;
-  border-top: 1px solid rgba(77,211,255,0.10);
+    text-align: center;
+    margin-top: 40px;
+    color: #888;
+    font-size: 0.9em;
 }
-
-@media (max-width:760px) {
-  .container.single-column { padding: 16px; margin: 18px auto; }
-  .site-title { font-size: 22px; }
-  .center-header { padding: 22px 0 10px 0; }
-  .container.single-column .card { padding: 18px 8px; }
-}
-
-
