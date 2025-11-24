@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Minimalista - SFPD | Inicio</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración personalizada de Tailwind (Tema Oscuro y Neón) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Colores de acento Hyprland (Violeta y Cyan)
+                        'primary': '#8B5CF6', // Violet 500
+                        'secondary': '#22D3EE', // Cyan 400
+                        'background-main': '#111827', // Gray 900
+                        'card-bg': '#1F2937', // Gray 800
+                        'text-light': '#F9FAFB', // Gray 50
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos base para el cuerpo y el canvas */
+        body {
+            background-color: #111827; /* Fondo principal oscuro */
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Asegura que el canvas esté detrás del contenido */
+        }
+        /* El contenido principal debe tener un z-index más alto */
+        main, header {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Estilos para el estado "activo" de la navegación (Ahora un botón enfocado) */
+        .active-nav-link {
+            background-color: #1F2937 !important; /* Fondo sutilmente más claro */
+            color: #22D3EE !important; /* Color de texto Cyan (Secondary) */
+            border: 1px solid #8B5CF6; /* Borde Violeta (Primary) */
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4); /* Sombra suave de neón */
+        }
+
+        /* Efecto Hover para los botones de navegación */
+        .nav-link:hover {
+            background-color: rgba(34, 211, 238, 0.1); /* Ligero fondo Cyan en hover */
+        }
+
+        /* Efecto Neón para el Título SFPD (AJUSTADO: Menos luz, más estilo digital/autoritario) */
+        .neon-glow {
+            /* Sombra principal más nítida y controlada */
+            text-shadow: 0 0 3px #22D3EE,
+                         0 0 8px rgba(139, 92, 246, 0.3); /* Sombra violeta suave */
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Efecto sutil de pulsación al pasar el ratón (menos agresivo) */
+        .neon-glow:hover {
+            text-shadow: 0 0 4px #22D3EE,
+                         0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Estilo para las tarjetas de información */
+        .info-card {
+            border: 1px solid rgba(139, 92, 246, 0.2); /* Borde sutil */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(34, 211, 238, 0.05); /* Sombra + mini neón */
+        }
+    </style>
+</head>
+<body class="font-sans text-text-light">
+
+    <!-- Canvas de Fondo Dinámico (Fragmentos en Movimiento) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navbar Fija y Responsiva (HEADER) -->
+    <header class="sticky top-0 z-50 bg-card-bg/90 backdrop-blur-sm shadow-xl border-b border-primary/50 py-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+            <!-- Título Principal: SFPD (Arriba, Estilo Neón Ajustado) -->
+            <a href="index.html" class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-widest mb-4 uppercase neon-glow">
+                SFPD
+            </a>
+
+            <!-- Navegación (NAV) (Abajo, Centrada) -->
+            <nav class="flex space-x-3 text-sm font-medium">
+                <!-- Botón de Inicio (ACTIVO EN ESTA PÁGINA) -->
+                <a href="index.html" id="nav-inicio" class="nav-link active-nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Inicio</a>
+
+                <!-- Enlaces a archivos separados -->
+                <a href="articulo.html" id="nav-articulo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Artículo Penal</a>
+                <a href="codigo.html" id="nav-codigo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Código Radial</a>
+                <a href="contacto.html" id="nav-contacto" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Contacto</a>
+                <!-- Link externo a Vida Rol -->
+                <a href="http://vida-roleplay.es" target="_blank" id="nav-rol" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Vida Rol</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: INICIO SFPD -->
+    <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-center p-4 sm:p-8">
+        <div id="inicio" class="max-w-4xl w-full mx-auto text-center py-10 section-content">
+
+            <!-- Eslogan Corto y Destacado (Ajustado) -->
+            <p class="text-xl sm:text-2xl text-primary font-light mb-2 uppercase tracking-wider">
+                Cuidando la Bahía, Protegiendo a la Ciudad
+            </p>
+
+            <!-- Título de la Sección -->
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-text-light mb-12">
+                San Fierro Police Department
+            </h1>
+
+            <!-- Grid de Información (Tarjetas) -->
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <!-- Tarjeta 1: ¿Qué es el SFPD? -->
+                <div class="info-card bg-card-bg rounded-xl p-6 text-left hover:shadow-primary/50 transition duration-300">
+                    <h2 class="text-2xl font-semibold text-secondary mb-3">
+                        ¿Quiénes Somos?
+                    </h2>
+                    <p class="text-gray-300">
+                        El San Fierro Police Department es la agencia encargada de mantener la ley y el orden en toda la región de la bahía. Somos dedicados a la vigilancia costera y urbana para una seguridad integral.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 2: Misión y Metas -->
+                <div class="info-card bg-card-bg rounded-xl p-6 text-left hover:shadow-primary/50 transition duration-300">
+                    <h2 class="text-2xl font-semibold text-secondary mb-3">
+                        Nuestra Misión
+                    </h2>
+                    <p class="text-gray-300">
+                        Nuestra misión es proteger a los residentes y visitantes de San Fierro, haciendo cumplir las leyes del estado con un enfoque en la integridad, el respeto a los derechos civiles y la acción rápida ante el crimen.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 3: Funciones Clave -->
+                <div class="info-card bg-card-bg rounded-xl p-6 text-left hover:shadow-primary/50 transition duration-300">
+                    <h2 class="text-2xl font-semibold text-secondary mb-3">
+                        Funciones Principales
+                    </h2>
+                    <p class="text-gray-300">
+                        Patrullaje de zonas comerciales y residenciales, respuesta a llamadas de emergencia, gestión de tráfico en zonas densas, y colaboración constante con otras agencias federales y estatales.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- JavaScript para Animación de Fondo -->
+    <script>
+        console.log("Script de la página cargado.");
+
+        // === 1. Lógica del Fondo Dinámico (Canvas - Fragmentos) ===
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            // Configuración de la animación
+            const particleCount = 70;
+            const lineDistance = 150; // Distancia máxima para conectar partículas
+            const particleColor = 'rgba(139, 92, 246, 0.7)'; // Violeta (Primary)
+            const lineColor = 'rgba(34, 211, 238, 0.2)'; // Cyan (Secondary)
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 1.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Rebotar en los bordes
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particleColor;
+                    ctx.fill();
+                }
+            }
+
+            // Inicializar el canvas y las partículas
+            function init() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+                }
+                console.log(`Canvas inicializado. ${particleCount} partículas creadas.`);
+            }
+
+            // Dibujar las líneas de conexión
+            function connect() {
+                for (let i = 0; i < particleCount; i++) {
+                    for (let j = i + 1; j < particleCount; j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distSq = dx * dx + dy * dy;
+
+                        if (distSq < lineDistance * lineDistance) {
+                            const opacity = 1 - (distSq / (lineDistance * lineDistance));
+                            ctx.strokeStyle = lineColor.replace('0.2', opacity);
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Bucle de animación principal
+            function animate() {
+                // Rellena el canvas con un color oscuro muy transparente para crear un efecto de "rastro" sutil
+                ctx.fillStyle = 'rgba(17, 24, 39, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height); // Usar fillRect en lugar de clearRect para el rastro
+
+                connect();
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            // Manejar el redimensionamiento de la ventana
+            window.addEventListener('resize', init);
+
+            // Iniciar la animación al cargar la ventana
+            window.onload = function () {
+                init();
+                animate();
+            }
+        } else {
+            console.error("No se encontró el elemento canvas. La animación de fondo no se iniciará.");
+        }
+    </script>
+
+</body>
+</html>

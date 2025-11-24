@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Minimalista - SFPD | Artículo Penal</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración personalizada de Tailwind (Tema Oscuro y Neón) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Colores de acento Hyprland (Violeta y Cyan)
+                        'primary': '#8B5CF6', // Violet 500
+                        'secondary': '#22D3EE', // Cyan 400
+                        'background-main': '#111827', // Gray 900
+                        'card-bg': '#1F2937', // Gray 800
+                        'text-light': '#F9FAFB', // Gray 50
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos base para el cuerpo y el canvas */
+        body {
+            background-color: #111827; /* Fondo principal oscuro */
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Asegura que el canvas esté detrás del contenido */
+        }
+        /* El contenido principal debe tener un z-index más alto */
+        main, header {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Estilos para el estado "activo" de la navegación */
+        .active-nav-link {
+            background-color: #1F2937 !important; /* Fondo sutilmente más claro */
+            color: #22D3EE !important; /* Color de texto Cyan (Secondary) */
+            border: 1px solid #8B5CF6; /* Borde Violeta (Primary) */
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4); /* Sombra suave de neón */
+        }
+
+        /* Efecto Hover para los botones de navegación */
+        .nav-link:hover {
+            background-color: rgba(34, 211, 238, 0.1); /* Ligero fondo Cyan en hover */
+        }
+
+        /* Efecto Neón para el Título SFPD */
+        .neon-glow {
+            text-shadow: 0 0 3px #22D3EE,
+                         0 0 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Estilo para las tarjetas de información */
+        .info-card {
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(34, 211, 238, 0.05);
+        }
+
+        /* Estilos para el listado de artículos */
+        .article-list {
+            display: grid;
+            grid-template-columns: 1fr; /* Columna única para móvil */
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .article-list {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Dos columnas en desktop */
+                gap: 1rem;
+            }
+        }
+
+        .article-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed rgba(139, 92, 246, 0.15);
+        }
+        .article-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="font-sans text-text-light">
+
+    <!-- Canvas de Fondo Dinámico (Fragmentos en Movimiento) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navbar Fija y Responsiva (HEADER) -->
+    <header class="sticky top-0 z-50 bg-card-bg/90 backdrop-blur-sm shadow-xl border-b border-primary/50 py-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+            <!-- Título Principal: SFPD -->
+            <a href="index.html" class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-widest mb-4 uppercase neon-glow">
+                SFPD
+            </a>
+
+            <!-- Navegación (NAV) -->
+            <nav class="flex space-x-3 text-sm font-medium">
+                <a href="index.html" id="nav-inicio" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Inicio</a>
+
+                <!-- Botón de Artículo Penal (ACTIVO EN ESTA PÁGINA) -->
+                <a href="articulo.html" id="nav-articulo" class="nav-link active-nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Artículo Penal</a>
+
+                <a href="codigo.html" id="nav-codigo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Código Radial</a>
+
+                <!-- ENLACE ACTUALIZADO A RECLUTAMIENTO -->
+                <a href="reclutamiento.html" id="nav-reclutamiento" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Reclutamiento</a>
+
+                <a href="http://vida-roleplay.es" target="_blank" id="nav-rol" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Vida Rol</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: CÓDIGO PENAL -->
+    <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-start p-4 sm:p-8">
+        <div class="max-w-6xl w-full mx-auto py-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2 text-center">
+                Código Penal de San Andreas 📘
+            </h1>
+            <p class="text-gray-400 mb-8 text-center">
+                Actualización y entendimiento del marco legal vigente (2023 - 2025).
+            </p>
+
+            <!-- CAPÍTULO I - TRÁFICO -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Capítulo I - Tráfico
+                </h2>
+                <div class="article-list">
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.1:</span> Giro indebido (<span class="text-yellow-400">$1,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.2:</span> Circular en sentido contrario (<span class="text-yellow-400">$2,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.3:</span> Estacionar en zonas no habilitadas y obstruir la vía pública (<span class="text-yellow-400">$2,500</span> + Vehículo al depósito)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.4:</span> Ignorar las señalizaciones de tránsito (<span class="text-yellow-400">$1,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.5:</span> Saltarse un semáforo (<span class="text-yellow-400">$1,000</span> por cada semáforo)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.6:</span> Obstruir el paso a un vehículo de emergencia (<span class="text-yellow-400">$1,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.7:</span> Omitir un control de tráfico (<span class="text-yellow-400">$5,000</span> + <span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.8:</span> Exceso de velocidad (Sup. a 150 km/h en ciudad) (<span class="text-yellow-400">$3,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.9:</span> Conducción temeraria (<span class="text-yellow-400">$10,000</span> + Prueba de alcoholímetro)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.10:</span> Conducción bajo efecto de sustancias o alcohol (<span class="text-yellow-400">$5,000</span> + Retirada del vehículo)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.11:</span> Circular sin las medidas de seguridad correspondientes (Casco/Cinturón/Veh. en mal estado) (<span class="text-yellow-400">$2,000</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.12:</span> Circular sin licencia de conducción (<span class="text-yellow-400">$1,500</span> + Retirada del vehículo)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.13:</span> Circular sin matrícula o matrícula tapada (<span class="text-yellow-400">$3,000</span> + Retirada del vehículo)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.14:</span> Carreras ilegales (<span class="text-yellow-400">$10,000</span> + Vehículo retirado al depósito)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.15:</span> Operar una aeronave o bote imprudentemente (<span class="text-yellow-400">$10,000</span> + Retiro)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.16:</span> Uso indebido del claxon (<span class="text-yellow-400">$2,500</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.17:</span> Vehículo con neones rojos o azules (no gubernamental) (<span class="text-yellow-400">$2,500</span> + Retiro de neones)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 1.18:</span> Destrucción del material de tránsito o señalizaciones (<span class="text-yellow-400">$4,500</span> + Prueba de alcoholímetro)
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAPÍTULO II - AGRESIÓN, DISTURBIOS Y CONDUCTAS ERRÓNEAS -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Capítulo II - Agresión, Disturbios y Conductas Erróneas
+                </h2>
+                <div class="article-list">
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.1:</span> Alteración del orden público (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.2:</span> Faltas de respeto hacia otro civil (<span class="text-red-400">5 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.3:</span> Vandalismo (<span class="text-red-400">5 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.4:</span> Daño al mobiliario/propiedad privada (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.5:</span> Violación (<span class="text-red-400">60 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.7:</span> Suplantación de identidad (Incluye civiles vestidos de funcionarios) (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.8:</span> Extorsión (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.9:</span> Fraude o engaño (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.10:</span> Acoso sexual (<span class="text-red-400">30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.11:</span> Negación a identificarse (<span class="text-red-400">5 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.12:</span> Obstrucción a la justicia (desacato) (<span class="text-red-400">5 a 10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.13:</span> Maltrato animal (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.14:</span> Exhibicionismo (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.15:</span> Violación de perímetro o procedimientos policiales (<span class="text-red-400">5 a 10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.16:</span> Manifestaciones ilegales (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.17:</span> Allanamiento de morada (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.18:</span> Presentar 20 multas sin pagar (<span class="text-red-400">30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.19:</span> Peleas callejeras ilegales (<span class="text-red-400">25 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 2.20:</span> Guerra de pandillas (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAPÍTULO III - ROBOS, COMPLICIDAD Y HUIDA -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Capítulo III - Robos, Complicidad y Huida
+                </h2>
+                <div class="article-list">
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.1:</span> Robo de vehículo (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.2:</span> Robo a un civil (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.3:</span> Robo menor (Tiendas, 24/7 - Negocios) (<span class="text-red-400">5 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.4:</span> Robo moderado (Casas - Empresas - Concesionarios) (<span class="text-red-400">25 a 30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.5:</span> Robo mayor (Banco – Joyería – Entidades públicas) (<span class="text-red-400">50 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.6:</span> Complicidad de delito (Mitad de meses del delito cómplice)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.7:</span> Huir de la justicia (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 3.8:</span> Robo a propiedad gubernamental (Patrulla u otro elemento del estado) (<span class="text-red-400">10 a 20 Meses</span>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAPÍTULO IV - PORTE DE ARMAS DE FUEGO O TRÁFICO ILEGAL -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Capítulo IV - Porte de Armas de Fuego o Tráfico Ilegal
+                </h2>
+                <div class="article-list">
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.1:</span> Posesión de arma blanca ilegal (Tras uso para agredir) (<span class="text-red-400">5 a 10 Meses</span> + Retiro)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.2:</span> Posesión de armas de bajo calibre (Glock, Tec 9, UZI) (<span class="text-red-400">5 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.3:</span> Posesión de armas de alto calibre (M4, AK, Sniper) (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.4:</span> Posesión de arma u objeto que atente contra la vida (no especificado) (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.5:</span> Posesión de armas explosivas (Granadas, Bombas, C4) (<span class="text-red-400">20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.6:</span> Posesión de balas/componentes (no mayor a 150) (<span class="text-red-400">5 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.7:</span> Posesión de balas/componentes (mayor a 150) (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.8:</span> Posesión de estupefacientes bajos (Marihuana, 1-10g) (<span class="text-red-400">3 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.9:</span> Posesión de estupefacientes altos (Cocaína, 1-10g) (<span class="text-red-400">10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.10:</span> Tráfico bajo (10g - 50g) (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.11:</span> Tráfico medio (50g - 100g) (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.12:</span> Tráfico alto (más de 100g) (<span class="text-red-400">20 a 30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.13:</span> Tráfico bajo de armas de bajo calibre (3 a 5 armas) (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.14:</span> Tráfico alto de armas de bajo calibre (más de 5 armas) (<span class="text-red-400">20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.15:</span> Tráfico bajo de armas de alto calibre (3 a 5 armas) (<span class="text-red-400">30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.16:</span> Tráfico alto de armas de alto calibre (más de 5 armas) (<span class="text-red-400">50 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.17:</span> Tráfico bajo de balas/componentes (200 - 400) (<span class="text-red-400">15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.18:</span> Tráfico alto de balas/componentes (más de 400) (<span class="text-red-400">20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.19:</span> Posesión baja de ganzúas (inferiores a 5) (<span class="text-red-400">3 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 4.20:</span> Posesión alta de ganzúas (superiores a 5) (<span class="text-red-400">5 Meses</span>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAPÍTULO V - DELITOS CONTRA LA INTEGRIDAD FÍSICA -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Capítulo V - Delitos contra la Integridad Física
+                </h2>
+                <div class="article-list">
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.1:</span> Intento de secuestro a un civil (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.2:</span> Secuestro a un civil (<span class="text-red-400">20 a 25 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.3:</span> Intento de secuestro a un funcionario público (<span class="text-red-400">25 a 35 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.4:</span> Secuestro a un funcionario público (<span class="text-red-400">30 a 50 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.5:</span> Intento de homicidio a civil o f.p. con arma blanca (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.6:</span> Intento de homicidio a civil o f.p. con arma de fuego (<span class="text-red-400">25 a 35 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.7:</span> Intento de homicidio a civil o f.p. con armas explosivas o sustancias tóxicas (<span class="text-red-400">30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.8:</span> Intento de homicidio a múltiples civiles (Mín. 3) (<span class="text-red-400">30 a 40 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.9:</span> Intento de homicidio a múltiples f.p. (Mín. 3) (<span class="text-red-400">35 a 50 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.10:</span> Homicidio a civil con arma blanca (<span class="text-red-400">20 a 25 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.11:</span> Homicidio a civil con arma de fuego/explosivas/tóxicas (<span class="text-red-400">25 a 35 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.12:</span> Homicidio a múltiples civiles (Mín. 3) (<span class="text-red-400">35 a 50 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.13:</span> Homicidio a funcionario público (<span class="text-red-400">25 a 35 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.14:</span> Homicidio a múltiples f.p. (Mín. 3) (<span class="text-red-400">40 a 55 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.15:</span> Amenaza o extorsión a un ciudadano (<span class="text-red-400">5 a 10 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.16:</span> Amenaza o extorsión a un funcionario público (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.17:</span> Agresión física de cualquier tipo a civil o f.p. (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.18:</span> Atrincheramiento (sin atentar contra la vida) (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.19:</span> Atrincheramiento (atentando contra la vida) (<span class="text-red-400">20 a 30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.20:</span> Toma de rehenes (<span class="text-red-400">25 a 30 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.21:</span> Extorsión a civil con agresión física (<span class="text-red-400">15 a 20 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.22:</span> Partícipe de enfrentamiento armado (bajo calibre) (<span class="text-red-400">10 a 15 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.23:</span> Partícipe de enfrentamiento armado (alto calibre) (<span class="text-red-400">20 a 25 Meses</span>)
+                    </div>
+                    <div class="article-item">
+                        <span class="font-bold text-primary">Art. 5.24:</span> Partícipe de blindado (<span class="text-red-400">20 a 25 Meses</span>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEY DE PROTECCIÓN AL FUNCIONARIO PÚBLICO -->
+            <div class="bg-card-bg rounded-xl p-6 info-card mb-8">
+                <h2 class="text-2xl font-semibold text-primary mb-4 border-b border-primary/50 pb-2">
+                    Ley de Protección al Funcionario Público (24/04/2025)
+                </h2>
+                <p class="text-sm text-gray-400 mb-4">
+                    Ley creada para proteger la vida de los Funcionarios Gubernamentales, manteniendo su identidad en secreto.
+                </p>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-secondary">ARTÍCULO 2 - Identificación</h3>
+                        <p class="text-sm">Los Funcionarios ya no usarán parches con nombre. Deben identificarse con **Apodo, Rango, Departamento y Número de Placa** ante civiles. Solo el Gobierno puede exigir la identificación por nombre.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-secondary">ARTÍCULO 3 - Entidades Involucradas (Identidad Oculta)</h3>
+                        <p class="text-sm">GOES LS/SF, PDI, 75th Regimiento de Rangers (&gt; Brigada de SAEM), UDRI, Neavy Seals (SAEM).</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-secondary">ARTÍCULO 4 - Funcionarios Comunes</h3>
+                        <p class="text-sm">Departamentos no mencionados en Art. 3 tienen prohibido dejar de identificarse. Deben usar: **Nombre, Departamento, Rango y Placa.**</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-secondary">ARTÍCULO 5 - Profesionalismo</h3>
+                        <p class="text-sm">Obligatorio mantener el profesionalismo y evitar exponer el nombre de compañeros sin autorización. Esto puede acarrear el cargo de **Violación de Confidencialidad.**</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-secondary">ARTÍCULO 6 - Penas de Prisión Añadidas (Solo por Juez)</h3>
+                        <ul class="list-disc list-inside ml-4 text-sm space-y-1">
+                            <li><span class="font-bold text-primary">Art. 6.18:</span> Violar la Confidencialidad del Funcionario (<span class="text-red-400">20 a 25 Meses</span>)</li>
+                            <li><span class="font-bold text-primary">Art. 6.19:</span> Violar la confidencialidad del Departamento (<span class="text-red-400">30 a 35 Meses</span>)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAPÍTULO VII - ACLARACIONES Y ENTENDIMIENTO -->
+            <div class="bg-card-bg rounded-xl p-6 info-card">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Aclaraciones y Entendimiento del Código Penal
+                </h2>
+                <ul class="list-disc list-inside space-y-2 text-gray-300">
+                    <li>Esta actualización está vigente desde 2023, impulsada por Awiwi con apoyo de los Russos.</li>
+                    <li>Se realizó un aumento en casi todas las **multas del Capítulo I** (Tráfico).</li>
+                    <li>Se modificaron las penas del **Capítulo II** (Agresión/Disturbios), eliminando multas para artículos graves (las multas son solo para el Cap. I).</li>
+                    <li>Se aumentaron penas de los capítulos 3, 4, 5, 6 para sugestionar lo contrario al *DM* (Deathmatch) con penas más largas.</li>
+                    <li>Artículos como el **2.1** recibieron meses en lugar de multas para evitar el *troll* y la toxicidad en jurisdicciones como Las Venturas o Favelas.</li>
+                    <li>Se realizaron **reducciones** a los artículos **3.3** y **4.2**.</li>
+                    <li>Se reparó el *bug* del artículo **1.10** y se eliminó el **1.19** por no existir el nitro.</li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- JavaScript para Animación de Fondo -->
+    <script>
+        // === Lógica del Fondo Dinámico (Canvas - Fragmentos) ===
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleCount = 70;
+            const lineDistance = 150;
+            const particleColor = 'rgba(139, 92, 246, 0.7)';
+            const lineColor = 'rgba(34, 211, 238, 0.2)';
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 1.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particleColor;
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+                }
+            }
+
+            function connect() {
+                for (let i = 0; i < particleCount; i++) {
+                    for (let j = i + 1; j < particleCount; j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distSq = dx * dx + dy * dy;
+
+                        if (distSq < lineDistance * lineDistance) {
+                            const opacity = 1 - (distSq / (lineDistance * lineDistance));
+                            ctx.strokeStyle = lineColor.replace('0.2', opacity);
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(17, 24, 39, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                connect();
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', init);
+            window.onload = function () {
+                init();
+                animate();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Minimalista - SFPD | Reclutamiento</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración personalizada de Tailwind (Tema Oscuro y Neón) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#8B5CF6',
+                        'secondary': '#22D3EE',
+                        'background-main': '#111827',
+                        'card-bg': '#1F2937',
+                        'text-light': '#F9FAFB',
+                        'success': '#10B981',
+                        'error': '#EF4444',
+                        'warning': '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos generales */
+        body {
+            background-color: #111827;
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        main, header {
+            position: relative;
+            z-index: 10;
+        }
+        /* Estilos de navegación y neón */
+        .active-nav-link {
+            background-color: #1F2937 !important;
+            color: #22D3EE !important;
+            border: 1px solid #8B5CF6;
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+        }
+        .nav-link:hover {
+            background-color: rgba(34, 211, 238, 0.1);
+        }
+        .neon-glow {
+            text-shadow: 0 0 3px #22D3EE,
+                         0 0 8px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+        .info-card {
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(34, 211, 238, 0.05);
+        }
+    </style>
+</head>
+<body class="font-sans text-text-light">
+
+    <!-- Canvas de Fondo Dinámico -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navbar Fija y Responsiva (HEADER) -->
+    <header class="sticky top-0 z-50 bg-card-bg/90 backdrop-blur-sm shadow-xl border-b border-primary/50 py-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+            <!-- Título Principal: SFPD -->
+            <a href="index.html" class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-widest mb-4 uppercase neon-glow">
+                SFPD
+            </a>
+
+            <!-- Navegación (NAV) -->
+            <nav class="flex space-x-3 text-sm font-medium">
+                <a href="index.html" id="nav-inicio" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Inicio</a>
+                <a href="articulo.html" id="nav-articulo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Artículo Penal</a>
+                <a href="codigo.html" id="nav-codigo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Código Radial</a>
+                <!-- Botón de Reclutamiento (ACTIVO) -->
+                <a href="reclutamiento.html" id="nav-reclutamiento" class="nav-link active-nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Reclutamiento</a>
+                <a href="http://vida-roleplay.es" target="_blank" id="nav-rol" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Vida Rol</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: FORMULARIO DE RECLUTAMIENTO -->
+    <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-start p-4 sm:p-8">
+        <div class="max-w-xl w-full mx-auto py-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2 text-center">
+                Reclutamiento y Test SFPD
+            </h1>
+            <p class="text-gray-400 mb-8 text-center">
+                Completa la información requerida y el test de conocimientos.
+            </p>
+
+            <!-- CARD DE FORMULARIO -->
+            <div id="recruitment-form-card" class="bg-card-bg rounded-xl p-6 info-card">
+
+                <!-- Indicador de Paso -->
+                <div class="flex justify-center mb-6 space-x-4">
+                    <div id="step-1-indicator" class="w-8 h-2 bg-primary rounded-full transition-all duration-300"></div>
+                    <div id="step-2-indicator" class="w-8 h-2 bg-gray-600 rounded-full transition-all duration-300"></div>
+                </div>
+
+                <form id="recruitment-form" onsubmit="event.preventDefault();">
+
+                    <!-- PASO 1: Información Clave -->
+                    <div id="step-1" class="space-y-6">
+                        <h2 class="text-xl font-semibold text-secondary mb-4">Paso 1: Datos de Postulante</h2>
+
+                        <div>
+                            <label for="fullName" class="block mb-2 text-sm font-medium text-text-light">Nombre del Personaje (Nombre_Apellido)</label>
+                            <input type="text" id="fullName" name="fullName"
+                                class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5"
+                                placeholder="Ej: John_Doe" required>
+                        </div>
+
+                        <div>
+                            <label for="discordID" class="block mb-2 text-sm font-medium text-text-light">UserID Desarrollador Discord (Numérico)</label>
+                            <div class="flex items-center relative">
+                                <span class="absolute left-3 text-gray-400">#</span>
+                                <input type="text" id="discordID" name="discordID"
+                                    class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5 pl-8"
+                                    placeholder="Ej: 1442603957175189644" required>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Activa el Modo Desarrollador en Discord para obtener este ID.</p>
+                        </div>
+
+                        <div>
+                            <label for="accountID" class="block mb-2 text-sm font-medium text-text-light">ID de su Cuenta VidaRol</label>
+                            <input type="text" id="accountID" name="accountID"
+                                class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5"
+                                placeholder="Ej: 11000010c9d91f2" required>
+                        </div>
+
+                        <button type="button" onclick="showStep(2)" id="continueButton"
+                            class="w-full text-white bg-primary hover:bg-primary/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-primary/30">
+                            Continuar al Test
+                        </button>
+                    </div>
+
+                    <!-- PASO 2: Test de Conocimientos -->
+                    <div id="step-2" class="space-y-6 hidden">
+                        <h2 class="text-xl font-semibold text-secondary mb-4">Paso 2: Test de Conocimientos (3 Preguntas)</h2>
+                        <p class="text-sm text-gray-400">Responde con base en la información de las secciones "Artículo Penal" y "Código Radial".</p>
+
+                        <!-- Pregunta 1: Código Radial -->
+                        <div class="p-4 bg-gray-800/50 rounded-lg">
+                            <label class="block mb-3 font-medium text-text-light">1. ¿Cuál es el código radial utilizado para solicitar apoyo urgente con un oficial herido?</label>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center"><input type="radio" name="q1" value="10-8" class="text-primary mr-2" required> 10-8 (En servicio)</label>
+                                <label class="flex items-center"><input type="radio" name="q1" value="10-13" class="text-primary mr-2"> 10-13 (Oficial herido)</label>
+                                <label class="flex items-center"><input type="radio" name="q1" value="10-99" class="text-primary mr-2"> 10-99 (Situación de rehén)</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 2: Artículo Penal -->
+                        <div class="p-4 bg-gray-800/50 rounded-lg">
+                            <label class="block mb-3 font-medium text-text-light">2. ¿Cuál es la pena de prisión que se puede solicitar por el delito de "Allanamiento de Morada" (supuesto Art. 15)?</label>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center"><input type="radio" name="q2" value="5 min" class="text-primary mr-2" required> 5 minutos</label>
+                                <label class="flex items-center"><input type="radio" name="q2" value="10 min" class="text-primary mr-2"> 10 minutos</label>
+                                <label class="flex items-center"><input type="radio" name="q2" value="20 min" class="text-primary mr-2"> 20 minutos</label>
+                            </div>
+                        </div>
+
+                        <!-- Pregunta 3: Procedimiento -->
+                        <div class="p-4 bg-gray-800/50 rounded-lg">
+                            <label class="block mb-3 font-medium text-text-light">3. En un control de tráfico rutinario, si un conductor se niega a detener el vehículo, ¿cuál es el primer curso de acción apropiado?</label>
+                            <div class="space-y-2 text-sm">
+                                <label class="flex items-center"><input type="radio" name="q3" value="Persecución a alta velocidad" class="text-primary mr-2" required> Iniciar una persecución a alta velocidad.</label>
+                                <label class="flex items-center"><input type="radio" name="q3" value="Desistir y reportar" class="text-primary mr-2"> Desistir y reportar la matrícula para seguimiento posterior.</label>
+                                <label class="flex items-center"><input type="radio" name="q3" value="Disparar a las ruedas" class="text-primary mr-2"> Autorizar inmediatamente disparos a las ruedas.</label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between space-x-4">
+                            <button type="button" onclick="showStep(1)"
+                                class="flex-1 text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-md px-5 py-2.5 text-center transition duration-200">
+                                Volver
+                            </button>
+                            <button type="button" onclick="submitApplication()" id="submitButton"
+                                class="flex-1 text-white bg-success hover:bg-success/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-success/30">
+                                <span id="buttonText">Finalizar y Enviar Postulación</span>
+                                <svg id="loadingSpinner" class="hidden w-5 h-5 mr-3 inline-block animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="messageBox" class="mt-4 p-3 rounded-lg text-center hidden" role="alert"></div>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-gray-700 text-sm text-center text-gray-500">
+                    <p class="text-warning">⚠️ Este formulario envía los datos a un Webhook de Discord. El equipo de Staff deberá **copiar el UserID** y enviar el DM manualmente al usuario.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // CONFIGURACIÓN CLAVE: WEBHOOK DE DISCORD PROPORCIONADO POR EL USUARIO
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1442603957175189644/nw9z_mtqn5YOvfX3bH8F6BAuzgKlVM6RFm0gefVCzMLRtEPd7NAhx25SpJVChegTJmp_";
+        // ====================================================================
+
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const indicator1 = document.getElementById('step-1-indicator');
+        const indicator2 = document.getElementById('step-2-indicator');
+        const messageBox = document.getElementById('messageBox');
+        const submitButton = document.getElementById('submitButton');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        let applicationData = {};
+
+        // Función para mostrar mensajes de estado
+        function displayMessage(message, type = 'success') {
+            messageBox.textContent = message;
+            messageBox.className = 'mt-4 p-3 rounded-lg text-center';
+            messageBox.classList.remove('hidden');
+
+            switch (type) {
+                case 'success':
+                    messageBox.classList.add('bg-success/20', 'text-success');
+                    break;
+                case 'error':
+                    messageBox.classList.add('bg-error/20', 'text-error');
+                    break;
+                case 'warning':
+                    messageBox.classList.add('bg-warning/20', 'text-warning');
+                    break;
+            }
+        }
+
+        // Función para cambiar entre pasos
+        function showStep(stepNumber) {
+            messageBox.classList.add('hidden'); // Ocultar mensajes al cambiar de paso
+
+            if (stepNumber === 2) {
+                // Validación de Paso 1: Solo verificar que los 3 campos clave no estén vacíos.
+                const fullName = document.getElementById('fullName').value.trim();
+                const discordID = document.getElementById('discordID').value.trim();
+                const accountID = document.getElementById('accountID').value.trim();
+
+                if (!fullName || !discordID || !accountID) {
+                    displayMessage("Por favor, completa todos los campos del Paso 1: Nombre, UserID y ID de Cuenta VidaRol.", 'warning');
+                    return;
+                }
+
+                // Guardar datos del Paso 1 temporalmente
+                applicationData = { fullName, discordID, accountID };
+
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                indicator1.classList.replace('bg-primary', 'bg-success');
+                indicator2.classList.replace('bg-gray-600', 'bg-primary');
+
+            } else if (stepNumber === 1) {
+                step2.classList.add('hidden');
+                step1.classList.remove('hidden');
+                indicator2.classList.replace('bg-primary', 'bg-gray-600');
+                indicator1.classList.replace('bg-success', 'bg-primary');
+            }
+        }
+
+        // Función principal de envío al Webhook
+        async function submitApplication() {
+            // Recoger respuestas del Test
+            const q1 = document.querySelector('input[name="q1"]:checked')?.value;
+            const q2 = document.querySelector('input[name="q2"]:checked')?.value;
+            const q3 = document.querySelector('input[name="q3"]:checked')?.value;
+
+            if (!q1 || !q2 || !q3) {
+                displayMessage("Debes responder todas las preguntas del test.", 'warning');
+                return;
+            }
+
+            // Unir datos
+            const finalData = {
+                ...applicationData,
+                q1: q1,
+                q2: q2,
+                q3: q3,
+            };
+
+            // Estado de Carga
+            buttonText.textContent = 'Enviando...';
+            loadingSpinner.classList.remove('hidden');
+            submitButton.disabled = true;
+            messageBox.classList.add('hidden');
+
+            // Formato de fecha y hora
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+
+            // --- Plantillas de Mensaje Directo para Staff (Aprobar/Rechazar) ---
+            const successDMTemplate = `¡Felicidades, **${finalData.fullName}**! Has aprobado el test de conocimientos para SFPD. Por favor, contacta a un reclutador en el servidor para coordinar la entrevista final.`;
+            const rejectDMTemplate = `Hola, **${finalData.fullName}**. Agradecemos tu postulación a SFPD, pero lamentablemente no has aprobado el test de conocimientos. Puedes volver a postular en 7 días. ¡Mucha suerte!`;
+            // -------------------------------------------------------------------
+
+            // Construcción del Payload de Discord (Embed)
+            const discordPayload = {
+                username: "SFPD | Sistema de Reclutamiento",
+                avatar_url: "https://placehold.co/60x60/8B5CF6/FFFFFF?text=SFPD", // Icono
+                embeds: [{
+                    title: "🚨 NUEVA POSTULACIÓN SFPD - REQUIERE ACCIÓN MANUAL",
+                    url: `https://discord.com/users/${finalData.discordID}`, // Enlace directo al perfil (si el staff tiene la app/web abierta)
+                    description: `**Postulante:** ${finalData.fullName}\n**Mención:** <@${finalData.discordID}>`,
+                    color: 16752384, // Color de Advertencia (Warning) en decimal
+                    fields: [
+                        { name: "🔴 USER ID DEVELOPER (COPIAR)", value: `\`${finalData.discordID}\``, inline: false }, // Destacado
+                        { name: "👤 Nombre de Personaje", value: finalData.fullName, inline: true },
+                        { name: "🆔 ID Cuenta VidaRol", value: finalData.accountID, inline: true },
+
+                        { name: "--- Respuestas al Test ---", value: "\u200B", inline: false }, // Separador
+                        { name: "Q1: Código Radio", value: `Respuesta: **${finalData.q1}**`, inline: false },
+                        { name: "Q2: Allanamiento Penal", value: `Respuesta: **${finalData.q2}**`, inline: false },
+                        { name: "Q3: Procedimiento Tráfico", value: `Respuesta: **${finalData.q3}**`, inline: false },
+
+                        { name: "--- 📄 Plantilla DM: APROBADO ---", value: `\`\`\`${successDMTemplate}\`\`\``, inline: false },
+                        { name: "--- 📄 Plantilla DM: RECHAZADO ---", value: `\`\`\`${rejectDMTemplate}\`\`\``, inline: false },
+
+                    ],
+                    footer: {
+                        text: `Enviado: ${dateStr} a las ${timeStr} (UTC) | REVISIÓN MANUAL REQUERIDA`,
+                    },
+                    timestamp: now.toISOString(), // Para que Discord muestre la hora correcta
+                }]
+            };
+
+            // Contenido simple para asegurar la mención en el canal
+            const contentPayload = {
+                content: `¡Nueva Postulación de ${finalData.fullName} enviada! Por favor, revisa el embed y envía un DM.`,
+                embeds: discordPayload.embeds
+            };
+
+            try {
+                // Intentar enviar al Webhook
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contentPayload)
+                });
+
+                if (response.ok) {
+                    displayMessage("¡Postulación enviada con éxito! El equipo de Staff revisará tus respuestas y te contactará por Mensaje Directo.", 'success');
+                    // Ocultar el formulario después del envío exitoso
+                    document.getElementById('recruitment-form-card').innerHTML = `
+                        <div class="text-center p-8">
+                            <svg class="w-16 h-16 mx-auto text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <h2 class="mt-4 text-2xl font-bold text-text-light">¡Gracias por postular!</h2>
+                            <p class="mt-2 text-gray-400">Tu información y respuestas han sido enviadas correctamente. El revisor te enviará un Mensaje Directo con el resultado.</p>
+                        </div>
+                    `;
+                } else {
+                    console.error(`Error de Webhook: ${response.status} - ${response.statusText}`);
+                    displayMessage(`Error (${response.status}): No se pudo enviar al Webhook. Verifica que la URL sea correcta.`, 'error');
+                }
+
+            } catch (error) {
+                console.error("Error Crítico de Red al enviar el Webhook:", error);
+                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de Discord. Revisa tu conexión a internet.`, 'error');
+            } finally {
+                // Restaurar el estado del botón
+                buttonText.textContent = 'Finalizar y Enviar Postulación';
+                loadingSpinner.classList.add('hidden');
+                submitButton.disabled = false;
+            }
+        }
+
+        // === Lógica del Fondo Dinámico ===
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleCount = 70;
+            const lineDistance = 150;
+            const particleColor = 'rgba(139, 92, 246, 0.7)';
+            const lineColor = 'rgba(34, 211, 238, 0.2)';
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 1.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particleColor;
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+                }
+            }
+
+            function connect() {
+                for (let i = 0; i < particleCount; i++) {
+                    for (let j = i + 1; j < particleCount; j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distSq = dx * dx + dy * dy;
+
+                        if (distSq < lineDistance * lineDistance) {
+                            const opacity = 1 - (distSq / (lineDistance * lineDistance));
+                            ctx.strokeStyle = lineColor.replace('0.2', opacity);
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                // Rellena con un color oscuro semi-transparente para el efecto de estela
+                ctx.fillStyle = 'rgba(17, 24, 39, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                connect();
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', initParticles);
+
+            // Iniciar al cargar la ventana
+            window.onload = function () {
+                initParticles();
+                animate();
+            }
+        }
+    </script>
+</body>
+</html>

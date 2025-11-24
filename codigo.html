@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Minimalista - SFPD | Código Radial</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración personalizada de Tailwind (Tema Oscuro y Neón) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Colores de acento Hyprland (Violeta y Cyan)
+                        'primary': '#8B5CF6', // Violet 500
+                        'secondary': '#22D3EE', // Cyan 400
+                        'background-main': '#111827', // Gray 900
+                        'card-bg': '#1F2937', // Gray 800
+                        'text-light': '#F9FAFB', // Gray 50
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos base para el cuerpo y el canvas */
+        body {
+            background-color: #111827; /* Fondo principal oscuro */
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Asegura que el canvas esté detrás del contenido */
+        }
+        /* El contenido principal debe tener un z-index más alto */
+        main, header {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Estilos para el estado "activo" de la navegación (Ahora un botón enfocado) */
+        .active-nav-link {
+            background-color: #1F2937 !important; /* Fondo sutilmente más claro */
+            color: #22D3EE !important; /* Color de texto Cyan (Secondary) */
+            border: 1px solid #8B5CF6; /* Borde Violeta (Primary) */
+            box-shadow: 0 0 8px rgba(139, 92, 246, 0.4); /* Sombra suave de neón */
+        }
+
+        /* Efecto Hover para los botones de navegación */
+        .nav-link:hover {
+            background-color: rgba(34, 211, 238, 0.1); /* Ligero fondo Cyan en hover */
+        }
+
+        /* Efecto Neón para el Título SFPD (AJUSTADO: Menos luz, más estilo digital/autoritario) */
+        .neon-glow {
+            /* Sombra principal más nítida y controlada */
+            text-shadow: 0 0 3px #22D3EE,
+                         0 0 8px rgba(139, 92, 246, 0.3); /* Sombra violeta suave */
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Efecto sutil de pulsación al pasar el ratón (menos agresivo) */
+        .neon-glow:hover {
+            text-shadow: 0 0 4px #22D3EE,
+                         0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Estilo para las tarjetas de información */
+        .info-card {
+            border: 1px solid rgba(139, 92, 246, 0.2); /* Borde sutil */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(34, 211, 238, 0.05); /* Sombra + mini neón */
+        }
+
+        /* Estilos para el listado de códigos (Responsive Grid) */
+        .code-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .code-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed rgba(139, 92, 246, 0.15); /* Línea punteada suave */
+        }
+        .code-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body class="font-sans text-text-light">
+
+    <!-- Canvas de Fondo Dinámico (Fragmentos en Movimiento) -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Navbar Fija y Responsiva (HEADER) -->
+    <header class="sticky top-0 z-50 bg-card-bg/90 backdrop-blur-sm shadow-xl border-b border-primary/50 py-4">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+            <!-- Título Principal: SFPD (Arriba, Estilo Neón Ajustado) -->
+            <a href="index.html" class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-widest mb-4 uppercase neon-glow">
+                SFPD
+            </a>
+
+            <!-- Navegación (NAV) (Abajo, Centrada) -->
+            <nav class="flex space-x-3 text-sm font-medium">
+                <!-- Enlaces a archivos separados -->
+                <a href="index.html" id="nav-inicio" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Inicio</a>
+                <a href="articulo.html" id="nav-articulo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Artículo Penal</a>
+
+                <!-- Botón de Código Radial (ACTIVO EN ESTA PÁGINA) -->
+                <a href="codigo.html" id="nav-codigo" class="nav-link active-nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Código Radial</a>
+
+                <a href="contacto.html" id="nav-contacto" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Contacto</a>
+                <!-- Link externo a Vida Rol -->
+                <a href="http://vida-roleplay.es" target="_blank" id="nav-rol" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Vida Rol</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL: CÓDIGO RADIAL -->
+    <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-start p-4 sm:p-8">
+        <div class="max-w-4xl w-full mx-auto text-center py-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-6">
+                Código Radial SFPD 📻
+            </h1>
+            <p class="text-gray-400 mb-8">
+                Códigos de comunicación, terminología de incidentes y unidades operativas esenciales.
+            </p>
+
+            <!-- Códigos 10 -->
+            <div class="bg-card-bg rounded-xl p-6 text-left info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Códigos 10
+                </h2>
+                <div class="code-list">
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-04:</span> Afirmativo/Recibido
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-05:</span> Negativo
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-09:</span> Repita el mensaje
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-10:</span> Inicio servicio
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-11:</span> Finalizo servicio
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-14:</span> Pueden retirarse de la situación
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-20:</span> Ubicación
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-21:</span> ¿Situación?
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-32:</span> Se requiere de una unidad/Solicito unidad de recogida
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-37:</span> Se necesita grúa en...
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-46:</span> Accidente, personas heridas
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-61:</span> Reparación de unidad/Llenar gasolina
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-95:</span> Oficial siendo seguido por vehículo sospechoso
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">10-99:</span> Misión Cumplida
+                    </div>
+                </div>
+            </div>
+
+            <!-- Códigos MONO (Incidentes) -->
+            <div class="bg-card-bg rounded-xl p-6 text-left info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Códigos MONO (Incidentes)
+                </h2>
+                <div class="code-list">
+                    <div class="code-item">
+                        <span class="font-bold text-primary">CT:</span> Colisión de tráfico
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">ByC:</span> Búsqueda y Captura
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">211:</span> Robo a tienda
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">211V:</span> Robo a vehículo
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">246:</span> Disparos en el lugar
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">254P:</span> Persecución a pie
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">254V:</span> Persecución vehicular
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">254A:</span> Persecución aérea
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">415:</span> Disturbios/Peleas
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">417:</span> Persona con un arma
+                    </div>
+                </div>
+            </div>
+
+            <!-- Códigos Clave (Prioridad) -->
+            <div class="bg-card-bg rounded-xl p-6 text-left info-card mb-8">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Códigos Clave (Prioridad y Estado)
+                </h2>
+                <div class="code-list">
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 0:</span> Llamado de alta prioridad, todas las unidades disponibles acudir
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 1:</span> Tiroteo
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 2:</span> Llamada de rutina, luces
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 3:</span> Llamada de emergencia, luces y sirena
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 4:</span> No se necesita más ayuda
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 5:</span> Mantenerse alejado
+                    </div>
+                    <div class="code-item">
+                        <span class="font-bold text-primary">Código 6:</span> Oficial en situación
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unidades Ordinarias -->
+            <div class="bg-card-bg rounded-xl p-6 text-left info-card">
+                <h2 class="text-2xl font-semibold text-secondary mb-4 border-b border-secondary/30 pb-2">
+                    Unidades Operativas (Indicativos)
+                </h2>
+                <ul class="space-y-3 text-gray-300">
+                    <li>
+                        <span class="font-bold text-primary">A - Unidad Adam:</span> Inicio de patrullaje habitual (A1-A5)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">M - Unidad Mary:</span> Apoyo a altas velocidades y cabeza en persecución (M1-M3)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">L - Unidad Lincoln:</span> Inicio de patrullaje habitual (L6-L7)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">R - Unidad Rescue:</span> Blindado de transporte de presos (R1, R2)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">K - Unidad King:</span> Unidad blindado (K1, K2)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">T - Unidades Torreta de agua:</span> Unidad Antidisturbios (T1)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">A - Unidad Maverick:</span> Unidad Aérea (A1)
+                    </li>
+                    <li>
+                        <span class="font-bold text-primary">M - Unidad Marítima:</span> Unidad para persecuciones en el agua (M1)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- JavaScript para Animación de Fondo -->
+    <script>
+        // === Lógica del Fondo Dinámico (Canvas - Fragmentos) ===
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const particleCount = 70;
+            const lineDistance = 150;
+            const particleColor = 'rgba(139, 92, 246, 0.7)';
+            const lineColor = 'rgba(34, 211, 238, 0.2)';
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 1.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = particleColor;
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                particles = [];
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+                }
+            }
+
+            function connect() {
+                for (let i = 0; i < particleCount; i++) {
+                    for (let j = i + 1; j < particleCount; j++) {
+                        const p1 = particles[i];
+                        const p2 = particles[j];
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distSq = dx * dx + dy * dy;
+
+                        if (distSq < lineDistance * lineDistance) {
+                            const opacity = 1 - (distSq / (lineDistance * lineDistance));
+                            ctx.strokeStyle = lineColor.replace('0.2', opacity);
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(17, 24, 39, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                connect();
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', init);
+            window.onload = function () {
+                init();
+                animate();
+            }
+        }
+    </script>
+</body>
+</html>
