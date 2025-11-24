@@ -201,18 +201,18 @@
 
                     <div id="messageBox" class="mt-4 p-3 rounded-lg text-center hidden" role="alert"></div>
                 </form>
-
-                <div class="mt-6 pt-4 border-t border-gray-700 text-sm text-center text-gray-500">
-                    <p class="text-warning">⚠️ Este formulario envía los datos a un Webhook de Discord. El equipo de Staff deberá **copiar el UserID** y enviar el DM manualmente al usuario.</p>
-                </div>
             </div>
         </div>
     </main>
 
     <script>
-        // CONFIGURACIÓN CLAVE: WEBHOOK DE DISCORD PROPORCIONADO POR EL USUARIO
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1442603957175189644/nw9z_mtqn5YOvfX3bH8F6BAuzgKlVM6RFm0gefVCzMLRtEPd7NAhx25SpJVChegTJmp_";
-        // ====================================================================
+        // =================================================================
+        // CONFIGURACIÓN CLAVE: API LOCAL (REEMPLAZA ESTO CON TU URL REAL)
+        // =================================================================
+        // Si el script de Python está corriendo localmente, usa esta URL.
+        // Si lo subes a un hosting (ej: Heroku, AWS), reemplaza por la URL pública.
+        const CUSTOM_SERVER_API_URL = "http://localhost:5000/create-ticket"; 
+        // =================================================================
 
         const step1 = document.getElementById('step-1');
         const step2 = document.getElementById('step-2');
@@ -227,7 +227,7 @@
 
         // Función para mostrar mensajes de estado
         function displayMessage(message, type = 'success') {
-            messageBox.textContent = message;
+            messageBox.innerHTML = message;
             messageBox.className = 'mt-4 p-3 rounded-lg text-center';
             messageBox.classList.remove('hidden');
 
@@ -258,6 +258,10 @@
                     displayMessage("Por favor, completa todos los campos del Paso 1: Nombre, UserID y ID de Cuenta VidaRol.", 'warning');
                     return;
                 }
+                if (isNaN(discordID) || discordID.length < 17) {
+                    displayMessage("El UserID de Discord debe ser un número largo y válido.", 'error');
+                    return;
+                }
 
                 // Guardar datos del Paso 1 temporalmente
                 applicationData = { fullName, discordID, accountID };
@@ -275,7 +279,7 @@
             }
         }
 
-        // Función principal de envío al Webhook
+        // Función principal de envío al API de Discord (a través del servidor Python)
         async function submitApplication() {
             // Recoger respuestas del Test
             const q1 = document.querySelector('input[name="q1"]:checked')?.value;
@@ -286,94 +290,69 @@
                 displayMessage("Debes responder todas las preguntas del test.", 'warning');
                 return;
             }
+            
+            // Generar un ID único para esta aplicación
+            const applicationId = crypto.randomUUID();
 
-            // Unir datos
+            // Unir datos para enviar al API
             const finalData = {
                 ...applicationData,
                 q1: q1,
                 q2: q2,
                 q3: q3,
+                applicationId: applicationId,
             };
 
             // Estado de Carga
-            buttonText.textContent = 'Enviando...';
+            buttonText.textContent = 'Creando Ticket...';
             loadingSpinner.classList.remove('hidden');
             submitButton.disabled = true;
             messageBox.classList.add('hidden');
 
-            // Formato de fecha y hora
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-
-            // --- Plantillas de Mensaje Directo para Staff (Aprobar/Rechazar) ---
-            const successDMTemplate = `¡Felicidades, **${finalData.fullName}**! Has aprobado el test de conocimientos para SFPD. Por favor, contacta a un reclutador en el servidor para coordinar la entrevista final.`;
-            const rejectDMTemplate = `Hola, **${finalData.fullName}**. Agradecemos tu postulación a SFPD, pero lamentablemente no has aprobado el test de conocimientos. Puedes volver a postular en 7 días. ¡Mucha suerte!`;
-            // -------------------------------------------------------------------
-
-            // Construcción del Payload de Discord (Embed)
-            const discordPayload = {
-                username: "SFPD | Sistema de Reclutamiento",
-                avatar_url: "https://placehold.co/60x60/8B5CF6/FFFFFF?text=SFPD", // Icono
-                embeds: [{
-                    title: "🚨 NUEVA POSTULACIÓN SFPD - REQUIERE ACCIÓN MANUAL",
-                    url: `https://discord.com/users/${finalData.discordID}`, // Enlace directo al perfil (si el staff tiene la app/web abierta)
-                    description: `**Postulante:** ${finalData.fullName}\n**Mención:** <@${finalData.discordID}>`,
-                    color: 16752384, // Color de Advertencia (Warning) en decimal
-                    fields: [
-                        { name: "🔴 USER ID DEVELOPER (COPIAR)", value: `\`${finalData.discordID}\``, inline: false }, // Destacado
-                        { name: "👤 Nombre de Personaje", value: finalData.fullName, inline: true },
-                        { name: "🆔 ID Cuenta VidaRol", value: finalData.accountID, inline: true },
-
-                        { name: "--- Respuestas al Test ---", value: "\u200B", inline: false }, // Separador
-                        { name: "Q1: Código Radio", value: `Respuesta: **${finalData.q1}**`, inline: false },
-                        { name: "Q2: Allanamiento Penal", value: `Respuesta: **${finalData.q2}**`, inline: false },
-                        { name: "Q3: Procedimiento Tráfico", value: `Respuesta: **${finalData.q3}**`, inline: false },
-
-                        { name: "--- 📄 Plantilla DM: APROBADO ---", value: `\`\`\`${successDMTemplate}\`\`\``, inline: false },
-                        { name: "--- 📄 Plantilla DM: RECHAZADO ---", value: `\`\`\`${rejectDMTemplate}\`\`\``, inline: false },
-
-                    ],
-                    footer: {
-                        text: `Enviado: ${dateStr} a las ${timeStr} (UTC) | REVISIÓN MANUAL REQUERIDA`,
-                    },
-                    timestamp: now.toISOString(), // Para que Discord muestre la hora correcta
-                }]
-            };
-
-            // Contenido simple para asegurar la mención en el canal
-            const contentPayload = {
-                content: `¡Nueva Postulación de ${finalData.fullName} enviada! Por favor, revisa el embed y envía un DM.`,
-                embeds: discordPayload.embeds
-            };
-
             try {
-                // Intentar enviar al Webhook
-                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                // Intentar enviar al API de Python
+                const response = await fetch(CUSTOM_SERVER_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(contentPayload)
+                    body: JSON.stringify(finalData)
                 });
 
+                const result = await response.json();
+
                 if (response.ok) {
-                    displayMessage("¡Postulación enviada con éxito! El equipo de Staff revisará tus respuestas y te contactará por Mensaje Directo.", 'success');
+                    // Éxito: El ticket ha sido creado
+                    const ticketUrl = result.ticket_url;
+                    
+                    displayMessage(`
+                        ¡Postulación enviada con éxito! Se ha creado tu ticket.<br>
+                        Por favor, haz clic aquí para continuar: 
+                        <a href="${ticketUrl}" target="_blank" class="font-bold underline text-secondary hover:text-primary transition duration-150">Abrir Ticket #${result.ticket_id.substring(0, 8)}...</a>
+                    `, 'success');
+                    
                     // Ocultar el formulario después del envío exitoso
                     document.getElementById('recruitment-form-card').innerHTML = `
                         <div class="text-center p-8">
                             <svg class="w-16 h-16 mx-auto text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h2 class="mt-4 text-2xl font-bold text-text-light">¡Gracias por postular!</h2>
-                            <p class="mt-2 text-gray-400">Tu información y respuestas han sido enviadas correctamente. El revisor te enviará un Mensaje Directo con el resultado.</p>
+                            <h2 class="mt-4 text-2xl font-bold text-text-light">¡Ticket Creado!</h2>
+                            <p class="mt-2 text-gray-400">
+                                Tu ticket de postulación ha sido creado exitosamente en Discord.
+                                Entra al canal y espera las instrucciones del Staff.
+                            </p>
+                            <a href="${ticketUrl}" target="_blank" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-secondary hover:bg-secondary/90">
+                                Ir al Ticket
+                            </a>
                         </div>
                     `;
+
                 } else {
-                    console.error(`Error de Webhook: ${response.status} - ${response.statusText}`);
-                    displayMessage(`Error (${response.status}): No se pudo enviar al Webhook. Verifica que la URL sea correcta.`, 'error');
+                    // Error: El API de Python devolvió un error (ej: Token o ID incorrecto)
+                    console.error(`Error del API: ${response.status} - ${result.message}`);
+                    displayMessage(`Error (${response.status}): ${result.message}. Verifica que el servidor de Python esté corriendo y los IDs de Discord sean correctos.`, 'error');
                 }
 
             } catch (error) {
-                console.error("Error Crítico de Red al enviar el Webhook:", error);
-                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de Discord. Revisa tu conexión a internet.`, 'error');
+                console.error("Error Crítico de Red al contactar el API:", error);
+                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de tickets en <code>${CUSTOM_SERVER_API_URL}</code>. Asegúrate de que el script de Python esté ejecutándose.`, 'error');
             } finally {
                 // Restaurar el estado del botón
                 buttonText.textContent = 'Finalizar y Enviar Postulación';
@@ -383,6 +362,7 @@
         }
 
         // === Lógica del Fondo Dinámico ===
+        // (Se mantiene intacta del código original)
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
