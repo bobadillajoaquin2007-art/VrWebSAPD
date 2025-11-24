@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Minimalista - SFPD | Reclutamiento</title>
-    <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configuración personalizada de Tailwind (Tema Oscuro y Neón) -->
     <script>
         tailwind.config = {
             theme: {
@@ -57,7 +55,7 @@
         }
         .neon-glow {
             text-shadow: 0 0 3px #22D3EE,
-                         0 0 8px rgba(139, 92, 246, 0.3);
+                            0 0 8px rgba(139, 92, 246, 0.3);
             transition: all 0.3s ease-in-out;
         }
         .info-card {
@@ -68,31 +66,25 @@
 </head>
 <body class="font-sans text-text-light">
 
-    <!-- Canvas de Fondo Dinámico -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Navbar Fija y Responsiva (HEADER) -->
     <header class="sticky top-0 z-50 bg-card-bg/90 backdrop-blur-sm shadow-xl border-b border-primary/50 py-4">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
 
-            <!-- Título Principal: SFPD -->
             <a href="index.html" class="text-4xl sm:text-5xl font-extrabold text-secondary tracking-widest mb-4 uppercase neon-glow">
                 SFPD
             </a>
 
-            <!-- Navegación (NAV) -->
             <nav class="flex space-x-3 text-sm font-medium">
                 <a href="index.html" id="nav-inicio" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Inicio</a>
                 <a href="articulo.html" id="nav-articulo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Artículo Penal</a>
                 <a href="codigo.html" id="nav-codigo" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Código Radial</a>
-                <!-- Botón de Reclutamiento (ACTIVO) -->
                 <a href="contacto.html" id="nav-contacto" class="nav-link active-nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Contacto</a>
                 <a href="http://vida-roleplay.es" target="_blank" id="nav-rol" class="nav-link text-gray-300 hover:text-secondary transition duration-150 py-2 px-4 rounded-lg">Vida Rol</a>
             </nav>
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL: FORMULARIO DE RECLUTAMIENTO -->
     <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-start p-4 sm:p-8">
         <div class="max-w-xl w-full mx-auto py-10">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2 text-center">
@@ -102,10 +94,8 @@
                 Completa la información requerida y el test de conocimientos.
             </p>
 
-            <!-- CARD DE FORMULARIO -->
             <div id="recruitment-form-card" class="bg-card-bg rounded-xl p-6 info-card">
 
-                <!-- Indicador de Paso -->
                 <div class="flex justify-center mb-6 space-x-4">
                     <div id="step-1-indicator" class="w-8 h-2 bg-primary rounded-full transition-all duration-300"></div>
                     <div id="step-2-indicator" class="w-8 h-2 bg-gray-600 rounded-full transition-all duration-300"></div>
@@ -113,7 +103,6 @@
 
                 <form id="recruitment-form" onsubmit="event.preventDefault();">
 
-                    <!-- PASO 1: Información Clave -->
                     <div id="step-1" class="space-y-6">
                         <h2 class="text-xl font-semibold text-secondary mb-4">Paso 1: Datos de Postulante</h2>
 
@@ -148,12 +137,10 @@
                         </button>
                     </div>
 
-                    <!-- PASO 2: Test de Conocimientos -->
                     <div id="step-2" class="space-y-6 hidden">
                         <h2 class="text-xl font-semibold text-secondary mb-4">Paso 2: Test de Conocimientos (3 Preguntas)</h2>
                         <p class="text-sm text-gray-400">Responde con base en la información de las secciones "Artículo Penal" y "Código Radial".</p>
 
-                        <!-- Pregunta 1: Código Radial -->
                         <div class="p-4 bg-gray-800/50 rounded-lg">
                             <label class="block mb-3 font-medium text-text-light">1. ¿Cuál es el código radial utilizado para solicitar apoyo urgente con un oficial herido?</label>
                             <div class="space-y-2 text-sm">
@@ -163,7 +150,6 @@
                             </div>
                         </div>
 
-                        <!-- Pregunta 2: Artículo Penal -->
                         <div class="p-4 bg-gray-800/50 rounded-lg">
                             <label class="block mb-3 font-medium text-text-light">2. ¿Cuál es la pena de prisión que se puede solicitar por el delito de "Allanamiento de Morada" (supuesto Art. 15)?</label>
                             <div class="space-y-2 text-sm">
@@ -173,7 +159,6 @@
                             </div>
                         </div>
 
-                        <!-- Pregunta 3: Procedimiento -->
                         <div class="p-4 bg-gray-800/50 rounded-lg">
                             <label class="block mb-3 font-medium text-text-light">3. En un control de tráfico rutinario, si un conductor se niega a detener el vehículo, ¿cuál es el primer curso de acción apropiado?</label>
                             <div class="space-y-2 text-sm">
@@ -207,11 +192,9 @@
 
     <script>
         // =================================================================
-        // CONFIGURACIÓN CLAVE: API LOCAL (REEMPLAZA ESTO CON TU URL REAL)
+        // ✅ CONFIGURACIÓN CLAVE: URL CORREGIDA DEL API DE CODESPACES
         // =================================================================
-        // Si el script de Python está corriendo localmente, usa esta URL.
-        // Si lo subes a un hosting (ej: Heroku, AWS), reemplaza por la URL pública.
-        const CUSTOM_SERVER_API_URL = "http://localhost:5000/create-ticket"; 
+        const CUSTOM_SERVER_API_URL = "https://psychic-space-fortnight-697jgrxg6xw7f4q9p-5000.app.github.dev/create-ticket";
         // =================================================================
 
         const step1 = document.getElementById('step-1');
@@ -290,7 +273,7 @@
                 displayMessage("Debes responder todas las preguntas del test.", 'warning');
                 return;
             }
-            
+
             // Generar un ID único para esta aplicación
             const applicationId = crypto.randomUUID();
 
@@ -322,13 +305,13 @@
                 if (response.ok) {
                     // Éxito: El ticket ha sido creado
                     const ticketUrl = result.ticket_url;
-                    
+
                     displayMessage(`
                         ¡Postulación enviada con éxito! Se ha creado tu ticket.<br>
-                        Por favor, haz clic aquí para continuar: 
+                        Por favor, haz clic aquí para continuar:
                         <a href="${ticketUrl}" target="_blank" class="font-bold underline text-secondary hover:text-primary transition duration-150">Abrir Ticket #${result.ticket_id.substring(0, 8)}...</a>
                     `, 'success');
-                    
+
                     // Ocultar el formulario después del envío exitoso
                     document.getElementById('recruitment-form-card').innerHTML = `
                         <div class="text-center p-8">
@@ -347,12 +330,12 @@
                 } else {
                     // Error: El API de Python devolvió un error (ej: Token o ID incorrecto)
                     console.error(`Error del API: ${response.status} - ${result.message}`);
-                    displayMessage(`Error (${response.status}): ${result.message}. Verifica que el servidor de Python esté corriendo y los IDs de Discord sean correctos.`, 'error');
+                    displayMessage(`Error (${response.status}): ${result.message}. Si el código es 400, verifica que los IDs de Discord sean correctos.`, 'error');
                 }
 
             } catch (error) {
                 console.error("Error Crítico de Red al contactar el API:", error);
-                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de tickets en <code>${CUSTOM_SERVER_API_URL}</code>. Asegúrate de que el script de Python esté ejecutándose.`, 'error');
+                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de tickets. **Asegúrate de que el script de Python esté ejecutándose** en la terminal de Codespaces.`, 'error');
             } finally {
                 // Restaurar el estado del botón
                 buttonText.textContent = 'Finalizar y Enviar Postulación';
@@ -362,7 +345,6 @@
         }
 
         // === Lógica del Fondo Dinámico ===
-        // (Se mantiene intacta del código original)
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
