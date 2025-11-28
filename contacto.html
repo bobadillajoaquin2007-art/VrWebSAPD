@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Minimalista - SFPD | Reclutamiento</title>
+    <title>Contacto SFPD - Dashboard Minimalista</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -64,7 +64,7 @@
         }
     </style>
 </head>
-<body class="font-sans text-text-light">
+<body>
 
     <canvas id="particle-canvas"></canvas>
 
@@ -88,263 +88,68 @@
     <main id="content-container" class="min-h-[calc(100vh-140px)] flex flex-col items-center justify-start p-4 sm:p-8">
         <div class="max-w-xl w-full mx-auto py-10">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-primary mb-2 text-center">
-                Reclutamiento y Test SFPD
+                Proceso de Contacto y Postulación 🚀
             </h1>
             <p class="text-gray-400 mb-8 text-center">
-                Completa la información requerida y el test de conocimientos.
+                Sigue los pasos a continuación para enviar tu postulación o contactar al Staff.
             </p>
 
-            <div id="recruitment-form-card" class="bg-card-bg rounded-xl p-6 info-card">
+            <div id="contact-card" class="bg-card-bg rounded-xl p-8 info-card text-center space-y-8">
 
-                <div class="flex justify-center mb-6 space-x-4">
+                <div class="flex justify-center space-x-4">
                     <div id="step-1-indicator" class="w-8 h-2 bg-primary rounded-full transition-all duration-300"></div>
                     <div id="step-2-indicator" class="w-8 h-2 bg-gray-600 rounded-full transition-all duration-300"></div>
                 </div>
 
-                <form id="recruitment-form" onsubmit="event.preventDefault();">
+                <div id="step-1-form" class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-secondary mb-4">Paso 1: Completa el Formulario Oficial</h2>
+                    <p class="text-gray-400">
+                        Tu primer paso es completar el formulario de postulación/contacto oficial. Se abrirá en una nueva pestaña.
+                    </p>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTC1mLZHWs3yqm4QF2Dxqs497xXL9TdwU2j56AqTPY9o82dw/viewform" target="_blank" onclick="goToStep(2)"
+                        class="w-full inline-flex justify-center items-center text-white bg-primary hover:bg-primary/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-primary/30 uppercase tracking-wider">
+                        Abrir Formulario de Google 📝
+                    </a>
+                </div>
 
-                    <div id="step-1" class="space-y-6">
-                        <h2 class="text-xl font-semibold text-secondary mb-4">Paso 1: Datos de Postulante</h2>
-
-                        <div>
-                            <label for="fullName" class="block mb-2 text-sm font-medium text-text-light">Nombre del Personaje (Nombre_Apellido)</label>
-                            <input type="text" id="fullName" name="fullName"
-                                class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5"
-                                placeholder="Ej: John_Doe" required>
-                        </div>
-
-                        <div>
-                            <label for="discordID" class="block mb-2 text-sm font-medium text-text-light">UserID Desarrollador Discord (Numérico)</label>
-                            <div class="flex items-center relative">
-                                <span class="absolute left-3 text-gray-400">#</span>
-                                <input type="text" id="discordID" name="discordID"
-                                    class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5 pl-8"
-                                    placeholder="Ej: 1442603957175189644" required>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">Activa el Modo Desarrollador en Discord para obtener este ID.</p>
-                        </div>
-
-                        <div>
-                            <label for="accountID" class="block mb-2 text-sm font-medium text-text-light">ID de su Cuenta VidaRol</label>
-                            <input type="text" id="accountID" name="accountID"
-                                class="bg-gray-700/50 border border-primary/50 text-text-light text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5"
-                                placeholder="Ej: 11000010c9d91f2" required>
-                        </div>
-
-                        <button type="button" onclick="showStep(2)" id="continueButton"
-                            class="w-full text-white bg-primary hover:bg-primary/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-primary/30">
-                            Continuar al Test
-                        </button>
-                    </div>
-
-                    <div id="step-2" class="space-y-6 hidden">
-                        <h2 class="text-xl font-semibold text-secondary mb-4">Paso 2: Test de Conocimientos (3 Preguntas)</h2>
-                        <p class="text-sm text-gray-400">Responde con base en la información de las secciones "Artículo Penal" y "Código Radial".</p>
-
-                        <div class="p-4 bg-gray-800/50 rounded-lg">
-                            <label class="block mb-3 font-medium text-text-light">1. ¿Cuál es el código radial utilizado para solicitar apoyo urgente con un oficial herido?</label>
-                            <div class="space-y-2 text-sm">
-                                <label class="flex items-center"><input type="radio" name="q1" value="10-8" class="text-primary mr-2" required> 10-8 (En servicio)</label>
-                                <label class="flex items-center"><input type="radio" name="q1" value="10-13" class="text-primary mr-2"> 10-13 (Oficial herido)</label>
-                                <label class="flex items-center"><input type="radio" name="q1" value="10-99" class="text-primary mr-2"> 10-99 (Situación de rehén)</label>
-                            </div>
-                        </div>
-
-                        <div class="p-4 bg-gray-800/50 rounded-lg">
-                            <label class="block mb-3 font-medium text-text-light">2. ¿Cuál es la pena de prisión que se puede solicitar por el delito de "Allanamiento de Morada" (supuesto Art. 15)?</label>
-                            <div class="space-y-2 text-sm">
-                                <label class="flex items-center"><input type="radio" name="q2" value="5 min" class="text-primary mr-2" required> 5 minutos</label>
-                                <label class="flex items-center"><input type="radio" name="q2" value="10 min" class="text-primary mr-2"> 10 minutos</label>
-                                <label class="flex items-center"><input type="radio" name="q2" value="20 min" class="text-primary mr-2"> 20 minutos</label>
-                            </div>
-                        </div>
-
-                        <div class="p-4 bg-gray-800/50 rounded-lg">
-                            <label class="block mb-3 font-medium text-text-light">3. En un control de tráfico rutinario, si un conductor se niega a detener el vehículo, ¿cuál es el primer curso de acción apropiado?</label>
-                            <div class="space-y-2 text-sm">
-                                <label class="flex items-center"><input type="radio" name="q3" value="Persecución a alta velocidad" class="text-primary mr-2" required> Iniciar una persecución a alta velocidad.</label>
-                                <label class="flex items-center"><input type="radio" name="q3" value="Desistir y reportar" class="text-primary mr-2"> Desistir y reportar la matrícula para seguimiento posterior.</label>
-                                <label class="flex items-center"><input type="radio" name="q3" value="Disparar a las ruedas" class="text-primary mr-2"> Autorizar inmediatamente disparos a las ruedas.</label>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between space-x-4">
-                            <button type="button" onclick="showStep(1)"
-                                class="flex-1 text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-md px-5 py-2.5 text-center transition duration-200">
-                                Volver
-                            </button>
-                            <button type="button" onclick="submitApplication()" id="submitButton"
-                                class="flex-1 text-white bg-success hover:bg-success/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-success/30">
-                                <span id="buttonText">Finalizar y Enviar Postulación</span>
-                                <svg id="loadingSpinner" class="hidden w-5 h-5 mr-3 inline-block animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="messageBox" class="mt-4 p-3 rounded-lg text-center hidden" role="alert"></div>
-                </form>
+                <div id="step-2-discord" class="hidden space-y-4 pt-6 border-t border-gray-700">
+                    <h2 class="text-2xl font-semibold text-success mb-4">Paso 2: Únete a Discord</h2>
+                    <p class="text-gray-400">
+                        Una vez que hayas enviado el formulario, haz clic abajo para unirte a nuestro Discord.
+                    </p>
+                    <a href="https://discord.gg/7T5k7JmY6N" target="_blank"
+                        class="w-full inline-flex justify-center items-center text-white bg-success hover:bg-success/90 focus:ring-4 focus:outline-none focus:ring-secondary/50 font-medium rounded-lg text-lg px-5 py-2.5 text-center transition duration-200 shadow-lg shadow-success/30 uppercase tracking-wider">
+                        Ir al Servidor de Discord ✅
+                    </a>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        // =================================================================
-        // ✅ CONFIGURACIÓN CLAVE: URL CORREGIDA DEL API DE CODESPACES
-        // =================================================================
-        const CUSTOM_SERVER_API_URL = "https://psychic-space-fortnight-697jgrxg6xw7f4q9p-5000.app.github.dev/create-ticket";
-        // =================================================================
-
-        const step1 = document.getElementById('step-1');
-        const step2 = document.getElementById('step-2');
         const indicator1 = document.getElementById('step-1-indicator');
         const indicator2 = document.getElementById('step-2-indicator');
-        const messageBox = document.getElementById('messageBox');
-        const submitButton = document.getElementById('submitButton');
-        const buttonText = document.getElementById('buttonText');
-        const loadingSpinner = document.getElementById('loadingSpinner');
+        const step1Div = document.getElementById('step-1-form');
+        const step2Div = document.getElementById('step-2-discord');
 
-        let applicationData = {};
-
-        // Función para mostrar mensajes de estado
-        function displayMessage(message, type = 'success') {
-            messageBox.innerHTML = message;
-            messageBox.className = 'mt-4 p-3 rounded-lg text-center';
-            messageBox.classList.remove('hidden');
-
-            switch (type) {
-                case 'success':
-                    messageBox.classList.add('bg-success/20', 'text-success');
-                    break;
-                case 'error':
-                    messageBox.classList.add('bg-error/20', 'text-error');
-                    break;
-                case 'warning':
-                    messageBox.classList.add('bg-warning/20', 'text-warning');
-                    break;
-            }
-        }
-
-        // Función para cambiar entre pasos
-        function showStep(stepNumber) {
-            messageBox.classList.add('hidden'); // Ocultar mensajes al cambiar de paso
-
+        // Función para avanzar al paso 2 (se llama al hacer clic en el botón del Formulario)
+        function goToStep(stepNumber) {
             if (stepNumber === 2) {
-                // Validación de Paso 1: Solo verificar que los 3 campos clave no estén vacíos.
-                const fullName = document.getElementById('fullName').value.trim();
-                const discordID = document.getElementById('discordID').value.trim();
-                const accountID = document.getElementById('accountID').value.trim();
+                // Mostrar el Paso 2
+                step2Div.classList.remove('hidden');
 
-                if (!fullName || !discordID || !accountID) {
-                    displayMessage("Por favor, completa todos los campos del Paso 1: Nombre, UserID y ID de Cuenta VidaRol.", 'warning');
-                    return;
-                }
-                if (isNaN(discordID) || discordID.length < 17) {
-                    displayMessage("El UserID de Discord debe ser un número largo y válido.", 'error');
-                    return;
-                }
-
-                // Guardar datos del Paso 1 temporalmente
-                applicationData = { fullName, discordID, accountID };
-
-                step1.classList.add('hidden');
-                step2.classList.remove('hidden');
+                // Actualizar indicadores
                 indicator1.classList.replace('bg-primary', 'bg-success');
                 indicator2.classList.replace('bg-gray-600', 'bg-primary');
-
             } else if (stepNumber === 1) {
-                step2.classList.add('hidden');
-                step1.classList.remove('hidden');
+                // Función de retroceso (no usada en este flujo, pero incluida por si acaso)
+                step2Div.classList.add('hidden');
                 indicator2.classList.replace('bg-primary', 'bg-gray-600');
                 indicator1.classList.replace('bg-success', 'bg-primary');
             }
         }
 
-        // Función principal de envío al API de Discord (a través del servidor Python)
-        async function submitApplication() {
-            // Recoger respuestas del Test
-            const q1 = document.querySelector('input[name="q1"]:checked')?.value;
-            const q2 = document.querySelector('input[name="q2"]:checked')?.value;
-            const q3 = document.querySelector('input[name="q3"]:checked')?.value;
-
-            if (!q1 || !q2 || !q3) {
-                displayMessage("Debes responder todas las preguntas del test.", 'warning');
-                return;
-            }
-
-            // Generar un ID único para esta aplicación
-            const applicationId = crypto.randomUUID();
-
-            // Unir datos para enviar al API
-            const finalData = {
-                ...applicationData,
-                q1: q1,
-                q2: q2,
-                q3: q3,
-                applicationId: applicationId,
-            };
-
-            // Estado de Carga
-            buttonText.textContent = 'Creando Ticket...';
-            loadingSpinner.classList.remove('hidden');
-            submitButton.disabled = true;
-            messageBox.classList.add('hidden');
-
-            try {
-                // Intentar enviar al API de Python
-                const response = await fetch(CUSTOM_SERVER_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(finalData)
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    // Éxito: El ticket ha sido creado
-                    const ticketUrl = result.ticket_url;
-
-                    displayMessage(`
-                        ¡Postulación enviada con éxito! Se ha creado tu ticket.<br>
-                        Por favor, haz clic aquí para continuar:
-                        <a href="${ticketUrl}" target="_blank" class="font-bold underline text-secondary hover:text-primary transition duration-150">Abrir Ticket #${result.ticket_id.substring(0, 8)}...</a>
-                    `, 'success');
-
-                    // Ocultar el formulario después del envío exitoso
-                    document.getElementById('recruitment-form-card').innerHTML = `
-                        <div class="text-center p-8">
-                            <svg class="w-16 h-16 mx-auto text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h2 class="mt-4 text-2xl font-bold text-text-light">¡Ticket Creado!</h2>
-                            <p class="mt-2 text-gray-400">
-                                Tu ticket de postulación ha sido creado exitosamente en Discord.
-                                Entra al canal y espera las instrucciones del Staff.
-                            </p>
-                            <a href="${ticketUrl}" target="_blank" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-secondary hover:bg-secondary/90">
-                                Ir al Ticket
-                            </a>
-                        </div>
-                    `;
-
-                } else {
-                    // Error: El API de Python devolvió un error (ej: Token o ID incorrecto)
-                    console.error(`Error del API: ${response.status} - ${result.message}`);
-                    displayMessage(`Error (${response.status}): ${result.message}. Si el código es 400, verifica que los IDs de Discord sean correctos.`, 'error');
-                }
-
-            } catch (error) {
-                console.error("Error Crítico de Red al contactar el API:", error);
-                displayMessage(`Error Crítico de Red: No se pudo conectar al servidor de tickets. **Asegúrate de que el script de Python esté ejecutándose** en la terminal de Codespaces.`, 'error');
-            } finally {
-                // Restaurar el estado del botón
-                buttonText.textContent = 'Finalizar y Enviar Postulación';
-                loadingSpinner.classList.add('hidden');
-                submitButton.disabled = false;
-            }
-        }
-
-        // === Lógica del Fondo Dinámico ===
+        // === Lógica del Fondo Dinámico (Mantenida) ===
         const canvas = document.getElementById('particle-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
